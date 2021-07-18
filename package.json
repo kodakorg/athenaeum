@@ -1,0 +1,20 @@
+{
+  "name": "athenaeum",
+  "version": "1.0.0",
+  "description": "Hjemmeside til namsos athenaeum",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server"
+  },
+  "author": "Ole Severin Hustad",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^7.0.0",
+    "ejs": "^2.6.1",
+    "express": "^4.16.4",
+    "googleapis": "^81.0.0",
+    "morgan": "^1.9.1",
+    "nodemailer": "^6.6.2",
+    "serve-favicon": "^2.5.0"
+  }
+}

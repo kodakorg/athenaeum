@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include ../partials/head %>
+</head>
+
+<body>
+
+  <header>
+    <% include ../partials/header %>
+  </header>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand mr-3">Hjem</a>
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="/kalender" class="nav-item nav-link active">Kalender</a>
+          <a href="/kontaktskjema" class="nav-item nav-link">Kontaktskjema</a>
+          <a href="/vilkaar" class="nav-item nav-link">Vilkår</a>
+          <a href="/lokalene" class="nav-item nav-link">Lokalene</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="bg-white p-3">
+    <iframe src="https://calendar.google.com/calendar/embed?src=namsos.athenaeum%40gmail.com&ctz=Europe%2FOslo"
+      style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+  </div>
+
+  <footer>
+    <% include ../partials/foother %>
+  </footer>
+
+</body>
+
+</html>

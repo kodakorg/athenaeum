@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include ../partials/head %>
+</head>
+
+<body>
+
+  <header>
+    <% include ../partials/header %>
+  </header>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand mr-3">Hjem</a>
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="/kalender" class="nav-item nav-link">Kalender</a>
+          <a href="/kontaktskjema" class="nav-item nav-link active">Kontaktskjema</a>
+          <a href="/vilkaar" class="nav-item nav-link">Vilkår</a>
+          <a href="/lokalene" class="nav-item nav-link">Lokalene</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="bg-white p-3">
+    <h1>Kontaktskjema</h1>
+    <form action="/" id="kontaktskjema" method="post">
+      <div class="mb-3">
+        <label for="fnavn" class="form-label fw-bold">Fornavn:</label>
+        <input type="text" class="form-control" name="fnavn" required>
+      </div>
+      <div class="mb-3">
+        <label for="enavn" class="form-label fw-bold">Etternavn:</label>
+        <input type="text" class="form-control" name="enavn">
+      </div>
+      <div class="mb-3">
+        <label for="email" class="form-label fw-bold">E-post:</label>
+        <input type="text" id="email" class="form-control" name="epost">
+      </div>
+      <div class="mb-3">
+        <label for="tlf" class="form-label fw-bold">Telefonnummer:</label>
+        <input type="number" class="form-control" name="tlf">
+      </div>
+      <table>
+        <tr>
+          <td><label class="form-label fw-bold" for="dato">Dato:</label></td>
+          <td><input type="date" id="dato" name="dato"></td>
+        </tr>
+        <tr>
+          <td><label class="form-label fw-bold" for="fra">Fra:</label></td>
+          <td><input type="time" name="fra"></td>
+        </tr>
+        <tr>
+          <td><label class="form-label fw-bold" for="til">Til:</label></td>
+          <td><input type="time" name="til"></td>
+        </tr>
+      </table>
+      <br><br>
+      <div class="mb-3">
+        <label for="formaal" class="form-label fw-bold">Formål med leien:</label>
+        <textarea class="form-control" id="formaal" name="formaal" rows="3"></textarea>
+      </div>
+      <div>
+        <input id="myCheckbox" type="checkbox" /> Jeg vedtar å ha lest <a href="/vilkaar.txt" id="terms">vilkårene</a>
+        <div id="content-area"></div>
+        <br><br>
+        <button class="btn btn-primary" id="myButton" disabled>Submit</button>
+      </div>
+    </form>
+  </div>
+
+  <footer>
+    <% include ../partials/foother %>
+  </footer>
+
+</body>
+
+
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <% include ../partials/head %>
+</head>
+
+<body>
+
+  <header>
+    <% include ../partials/header %>
+  </header>
+
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a href="/" class="navbar-brand mr-3">Hjem</a>
+      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="navbar-nav">
+          <a href="/kalender" class="nav-item nav-link">Kalender</a>
+          <a href="/kontaktskjema" class="nav-item nav-link">Kontaktskjema</a>
+          <a href="/vilkaar" class="nav-item nav-link">Vilkår</a>
+          <a href="/lokalene" class="nav-item nav-link">Lokalene</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="bg-white p-3">
+    <img class="img-fluid" src="images/athenaeum.jpg" alt="logo"><br>
+    Namsos Athenæum ligger sentralt i Namsos sentrum, nærmere bestemt i Sverres gate 1.
+    Lokalet har festsal med plass til ca. 140 personer, salong med 44 sitteplasser og peisestue som kan dekkes til ca.
+    40 personer. <br><br>
+    Forespørsel om leie gjøres på <a href="/kontaktskjema">kontaktskjema</a>.<br><br>
+    Vi gjør oppmerksom på at <a href="/vilkaar">vilkår</a> for utleie gjelder.<br><br>
+    Det er mer informasjon og flere bilder/prisliste for leie tilgjengelig på facebooksiden<br>
+    «<a href="https://www.facebook.com/Selskapslokaler-Namsos-Athen%C3%A6um-743511125859531">Selskapslokaler Namsos
+      Athenæum</a>».
+  </div>
+
+  <footer>
+    <% include ../partials/foother %>
+  </footer>
+
+</body>
+
+</html>
