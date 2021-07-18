@@ -84,8 +84,7 @@ app.post('/', function (req, res) {
 
   const mailOptions = {
     from: 'ole.hustad@gmail.com',
-    to: 'ole.hustad@tietoevry.com',
-    /* to: "namsos.athenaeum@gmail.com", */
+    to: "namsos.athenaeum@gmail.com",
     subject: 'Bestilling av rom for Namsos Athenæum',
     html: html_string
   }
@@ -102,9 +101,9 @@ app.post('/', function (req, res) {
   })
 })
 
-/* setInterval(function () {
+setInterval(function () {
   http.get("https://athenaeum-no.herokuapp.com/");
-}, 1200000); */
+}, 1200000);
 
 app.listen(process.env.PORT || port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
