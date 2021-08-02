@@ -1,9 +1,8 @@
 body {
-  padding-top: 30px;
   background: #373B44;
   background: -webkit-linear-gradient(to right, #1f4075, #373B44);
   background: linear-gradient(to right, #1f4075, #373B44);
-  font-family: Calibri;
+  font-family: Georgia, 'Times New Roman', Times, serif;
   overflow: visible;
 }
 
@@ -21,4 +20,46 @@ body {
   color: #505050;
   background-color: #ffffff;
   font-size: 90%;
+}
+
+.logo {
+  color: white;
+  text-align: center;
+}
+
+.top {
+  margin-top: 10px;
+}
+
+.top, .middle {
+  margin-bottom: 0;
+}
+
+.middle {
+  font-size: 3em;
+}
+
+.lined {
+  overflow: hidden;
+}
+
+.lined:before,
+.lined:after {
+  background-color: #fff;
+  content: "";
+  display: inline-block;
+  height: 1px;
+  position: relative;
+  vertical-align: middle;
+  width: 50%;
+}
+
+.lined:before { 
+  right: 0.5em;
+  margin-left: -50%;
+}
+
+.lined:after { 
+  left: 0.5em;
+  margin-right: -50%;
 }
