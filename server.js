@@ -102,7 +102,7 @@ app.post('/', function (req, res) {
 })
 
 setInterval(function () {
-  http.get("https://athenaeum-no.herokuapp.com/");
+  http.get("http://athenæum.no/");
 }, 1200000);
 
 app.listen(process.env.PORT || port, () => {
