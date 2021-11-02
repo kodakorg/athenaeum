@@ -2,8 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000
 const nodemailer = require('nodemailer');
-const { google } = require("googleapis");
-const OAuth2 = google.auth.OAuth2;
 const http = require("http");
 
 var bodyParser = require('body-parser');
@@ -12,28 +10,12 @@ var favicon = require('serve-favicon');
 var path = require("path");
 require('dotenv').config()
 
-const myOAuth2Client = new OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  "https://developers.google.com/oauthplayground"
-)
-
-myOAuth2Client.setCredentials({
-  refresh_token: process.env.REFRESH_TOKEN
-});
-
-const myAccessToken = myOAuth2Client.getAccessToken()
-
-const transport = nodemailer.createTransport({
-  service: "gmail",
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
   auth: {
-    type: "OAuth2",
-    user: "ole.hustad@gmail.com",
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
-    accessToken: myAccessToken
-  }
+    user: process.env.EMAIL_ADDRESS,
+    pass: process.env.EMAIL_PASSWORD
+  },
 });
 
 app.set('view engine', 'ejs');
@@ -44,6 +26,11 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('combined'));
 app.set('trust proxy', 1)
+
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+}
 
 app.get('/', function (req, res) {
   res.render('pages/hovedside');
@@ -71,8 +58,8 @@ app.post('/', function (req, res) {
   var epost = req.body.epost;
   var tlf = req.body.tlf;
   var dato = req.body.dato;
-  var fra = req.body.fra;
-  var til = req.body.til;
+  var fra = req.body.fra.toString();
+  var til = req.body.til.toString();
   var tekst = req.body.formaal;
   var html_string = "";
   html_string += "Fornavn: " + fnavn + "<br>";
@@ -82,24 +69,66 @@ app.post('/', function (req, res) {
   html_string += "Dato: " + dato + " <br>Fra: " + fra + " Til: " + til + "<br><br>";
   html_string += "Formålet med leien: " + tekst;
 
-  const mailOptions = {
-    from: 'ole.hustad@gmail.com',
-    to: "namsos.athenaeum@gmail.com",
-    subject: 'Bestilling av rom for Namsos Athenæum',
-    html: html_string
-  }
-  transport.sendMail(mailOptions, function (err, result) {
-    if (err) {
-      res.render('pages/tilbakemelding', {
-        sjekk: false,
-        message: err
-      })
-    } else {
-      transport.close();
-      res.render('pages/tilbakemelding', { sjekk: true })
+  if (typeof fnavn === 'undefined' || fnavn === null || fnavn === '') {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Fornavn mangler eller er tom"
+    });
+  } else if (typeof enavn === 'undefined' || enavn === null || enavn === '') {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Etternavn mangler eller er tom"
+    });
+  } else if (!validateEmail(epost)) {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Epost har feil format"
+    });
+  } else if (!/^\d{8}$/.test(tlf)) {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Telefonnummer må være 8 siffer"
+    });
+  } else if (!new Date(dato).getTime() > 0) {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Dato mangler eller er tom"
+    });
+  } else if (!fra.match(/^[012][0-9]:[0-9][0-9]$/)) {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Fra tidspunkt mangler eller har feil formatet"
+    });
+  } else if (!til.match(/^[012][0-9]:[0-9][0-9]$/)) {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Til tidspunkt mangler eller er tom"
+    });
+  } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
+    res.render('pages/tilbakemelding', {
+      sjekk: false,
+      message: "Forespørsel mangler eller er tom"
+    });
+  } else {
+    const mailOptions = {
+      from: 'Namsos Athenæum Kontaktskjema <kontaktskjema.athenaeum@gmail.com>',
+      to: "namsos.athenaeum@gmail.com",
+      subject: 'Bestilling av rom for Namsos Athenæum',
+      html: html_string
     }
-  })
-})
+    transporter.sendMail(mailOptions, function (err, result) {
+      if (err) {
+        res.render('pages/tilbakemelding', {
+          sjekk: false,
+          message: err
+        });
+      } else {
+        transporter.close();
+        res.render('pages/tilbakemelding', { sjekk: true });
+      }
+    })
+  }
+});
 
 setInterval(function () {
   http.get("http://athenæum.no/");
