@@ -4,7 +4,6 @@ const port = 3000
 const nodemailer = require('nodemailer');
 const http = require("http");
 
-var bodyParser = require('body-parser');
 var morgan = require('morgan')
 var favicon = require('serve-favicon');
 var path = require("path");
@@ -18,19 +17,19 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-app.set('view engine', 'ejs');
-app.use(express.static("public"));
-app.use('/css', express.static(path.join(__dirname, 'public/css')))
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(morgan('combined'));
-app.set('trust proxy', 1)
-
 function validateEmail(email) {
   const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email);
 }
+
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }))
+app.use('/css', express.static(path.join(__dirname, 'public/css')))
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(morgan('combined'));
+
+app.set('trust proxy', 1)
+app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
   res.render('pages/hovedside');
