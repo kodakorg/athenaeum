@@ -92,17 +92,17 @@ app.post('/', function (req, res) {
   } else if (!new Date(dato).getTime() > 0) {
     res.render('pages/tilbakemelding', {
       sjekk: false,
-      message: "Dato mangler eller er tom"
+      message: "Dato har feil format"
     });
   } else if (!fra.match(/^[012][0-9]:[0-9][0-9]$/)) {
     res.render('pages/tilbakemelding', {
       sjekk: false,
-      message: "Fra tidspunkt mangler eller har feil formatet"
+      message: "Fra tidspunkt har feil format"
     });
   } else if (!til.match(/^[012][0-9]:[0-9][0-9]$/)) {
     res.render('pages/tilbakemelding', {
       sjekk: false,
-      message: "Til tidspunkt mangler eller er tom"
+      message: "Til tidspunkt har feil format"
     });
   } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
     res.render('pages/tilbakemelding', {
@@ -135,5 +135,5 @@ setInterval(function () {
 }, 1200000);
 
 app.listen(process.env.PORT || port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
+  console.log(`App listening at http://localhost:${port}`)
 })
