@@ -11,23 +11,6 @@
     <% include ../partials/header %>
   </header>
 
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <div class="container-fluid">
-      <a href="/" class="navbar-brand mr-3">Hjem</a>
-      <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <div class="navbar-nav">
-          <a href="/kalender" class="nav-item nav-link">Kalender</a>
-          <a href="/kontaktskjema" class="nav-item nav-link active">Kontaktskjema</a>
-          <a href="/vilkaar" class="nav-item nav-link">Vilkår</a>
-          <a href="/lokalene" class="nav-item nav-link">Lokalene</a>
-        </div>
-      </div>
-    </div>
-  </nav>
-
   <div class="bg-white p-3">
     <h1>Kontaktskjema</h1>
     <form action="/" id="kontaktskjema" method="post">
@@ -74,6 +57,11 @@
       </div>
     </form>
   </div>
+  <br>
+
+  <script>
+    document.getElementById("kontaktskjema").classList.add("active");
+  </script>
 
   <footer>
     <% include ../partials/foother %>

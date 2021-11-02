@@ -6,6 +6,11 @@ body {
   overflow: visible;
 }
 
+p {
+  max-width: 600px;
+}
+
+
 .error {
   color: red;
 }
