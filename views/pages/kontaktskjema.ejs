@@ -44,7 +44,18 @@
           <td><input type="time" name="til"></td>
         </tr>
       </table>
-      <br><br>
+      <br>
+      <div class="mb-3">
+        <p class="fw-bold fs-6">Hvilket av lokalene vil du leie:</p>
+        <input type="checkbox" id="festsalen" name="festsalen" value="festsalen">
+        <label for="festsalen">Festsalen</label><br>
+        <input type="checkbox" id="salongen" name="salongen" value="salongen">
+        <label for="salongen">Salongen</label><br>
+        <input type="checkbox" id="peisestuen" name="peisestuen" value="peisestuen">
+        <label for="peisestuen">Peisestuen</label><br>
+        <input type="checkbox" id="kjokkenet" name="kjokkenet" value="kjokkenet">
+        <label for="kjokkenet">Kjøkkenet</label><br>
+      </div>
       <div class="mb-3">
         <label for="formaal" class="form-label fw-bold">Formål med leien:</label>
         <textarea class="form-control" id="formaal" name="formaal" rows="3"></textarea>
@@ -68,6 +79,5 @@
   </footer>
 
 </body>
-
 
 </html>

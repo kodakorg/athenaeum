@@ -66,6 +66,33 @@ app.post('/', function (req, res) {
   html_string += "Epost: " + epost + "<br>";
   html_string += "Telefonnummer: " + tlf + "<br><br>";
   html_string += "Dato: " + dato + " <br>Fra: " + fra + " Til: " + til + "<br><br>";
+
+  if (req.body.festsalen || req.body.salongen || req.body.peisestuen || req.body.kjokkenet) {
+    html_string += "Lokaler:<br>"
+  } else {
+    html_string += "Ingen lokaler huket av i kontaktskjemaet.<br><br>"
+  }
+
+  if (req.body.festsalen) {
+    html_string += "- Festsalen<br>"
+  }
+
+  if (req.body.salongen) {
+    html_string += "- Salongen<br>"
+  }
+
+  if (req.body.peisestuen) {
+    html_string += "- Peisestuen<br>"
+  }
+
+  if (req.body.kjokkenet) {
+    html_string += "- Kjøkkenet<br>"
+  }
+
+  if (req.body.festsalen || req.body.salongen || req.body.peisestuen || req.body.kjokkenet) {
+    html_string += "<br>"
+  }
+
   html_string += "Formålet med leien: " + tekst;
 
   if (typeof fnavn === 'undefined' || fnavn === null || fnavn === '') {
@@ -110,9 +137,14 @@ app.post('/', function (req, res) {
     });
   } else {
     const mailOptions = {
-      from: 'Namsos Athenæum Kontaktskjema <kontaktskjema.athenaeum@gmail.com>',
+      from: {
+        name: 'Kontaktskjema Athenæum',
+        address: 'kontaktskjema.athenaeum@gmail.com'
+      },
       to: "namsos.athenaeum@gmail.com",
+      replyTo: epost,
       subject: 'Bestilling av rom for Namsos Athenæum',
+      text: html_string,
       html: html_string
     }
     transporter.sendMail(mailOptions, function (err, result) {
