@@ -2,21 +2,21 @@
 <html lang="en">
 
 <head>
-  <% include ../partials/head %>
+  <%- include('../partials/head') -%>
 </head>
 
 <body>
 
   <header>
-    <% include ../partials/header %>
+    <%- include('../partials/header') -%>
   </header>
 
   <div class="bg-white p-3">
     <h3>Kontaktskjema</h3>
-    <form action="/" id="kontaktskjema" method="post">
+    <form action="/skjema" id="kontaktskjema" method="post">
       <div class="mb-3">
         <label for="fnavn" class="form-label fw-bold">Fornavn:</label>
-        <input type="text" class="form-control" name="fnavn" required>
+        <input type="text" class="form-control" name="fnavn">
       </div>
       <div class="mb-3">
         <label for="enavn" class="form-label fw-bold">Etternavn:</label>
@@ -70,13 +70,70 @@
   </div>
   <br>
 
-  <script>
-    document.getElementById("kontaktskjema").classList.add("active");
-  </script>
-
   <footer>
-    <% include ../partials/foother %>
+    <%- include('../partials/foother') -%>
   </footer>
+
+  <script>
+    document.getElementById("skjema").classList.add("active");
+
+    $(document).ready(function () {
+      $('#myCheckbox').click(function () {
+        $('#myButton').prop("disabled", !$("#myCheckbox").prop("checked"));
+      })
+    });
+
+    jQuery.fn.terms_agree = function (content_area, selector) {
+      var body = $(body);
+      $(this).click(function () {
+        body.css("height", "auto").css("height", body.height()); // Prevent page flicker on slideup
+        if ($(content_area).html() == "") {
+          $(content_area).load($(this).attr("href") + (selector ? " " + selector : ""));
+        }
+        $(content_area).slideToggle();
+        return false;
+      });
+    }
+
+    $(function () {
+      $("#terms").terms_agree("#content-area");
+    });
+
+    $("#kontaktskjema").validate({
+      rules: {
+        fnavn: "required",
+        enavn: "required",
+        epost: {
+          required: true,
+          email: true
+        },
+        tlf: {
+          required: true,
+          minlength: 8,
+        },
+        dato: "required",
+        fra: "required",
+        til: "required",
+        formaal: "required"
+      },
+      messages: {
+        fnavn: "Fornavn må fylles ut",
+        enavn: "Etternavn må fylles ut",
+        epost: {
+          required: "Epost må fylles ut",
+          email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
+        },
+        tlf: {
+          required: "Telefonnummer må fylles ut",
+          minlengt: "Telefonnummer må være minimum 8 tall",
+        },
+        dato: "Dato må fylles ut",
+        fra: "Fra tidspunkt må fylles ut",
+        til: "Til tidspunkt må fylles ut",
+        formaal: "Formål må fylles ut"
+      }
+    });
+  </script>
 
 </body>
 

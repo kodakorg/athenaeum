@@ -9,6 +9,15 @@ var favicon = require('serve-favicon');
 var path = require("path");
 require('dotenv').config()
 
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
+app.use('/css', express.static(path.join(__dirname, 'public/css')))
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(morgan('combined'));
+
+app.set('view engine', 'ejs');
+app.set('trust proxy', 1);
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -21,15 +30,6 @@ function validateEmail(email) {
   const re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   return re.test(email);
 }
-
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }))
-app.use('/css', express.static(path.join(__dirname, 'public/css')))
-app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(morgan('combined'));
-
-app.set('trust proxy', 1)
-app.set('view engine', 'ejs');
 
 app.get('/', function (req, res) {
   res.render('pages/hovedside');
@@ -51,7 +51,7 @@ app.get('/kontaktskjema', function (req, res) {
   res.render('pages/kontaktskjema', { sjekk: false });
 });
 
-app.post('/', function (req, res) {
+app.post('/skjema', function (req, res) {
   var fnavn = req.body.fnavn;
   var enavn = req.body.enavn;
   var epost = req.body.epost;
