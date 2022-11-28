@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 3000
+const port = 8888
 const nodemailer = require('nodemailer');
 const http = require("http");
 
@@ -30,13 +30,6 @@ function validateEmail(email) {
   const re = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   return re.test(email);
 }
-
-app.use(function (request, response, next) {
-  if (process.env.NODE_ENV != 'development' && !request.secure) {
-    return response.redirect("https://" + request.headers.host + request.url);
-  }
-  next();
-})
 
 app.get('/', function (req, res) {
   res.render('pages/hovedside');
@@ -167,10 +160,6 @@ app.post('/skjema', function (req, res) {
     })
   }
 });
-
-/* setInterval(function () {
-  http.get("http://athenæum.no/");
-}, 1200000); */
 
 app.listen(process.env.PORT || port, () => {
   console.log(`App listening at http://localhost:${port}`)
