@@ -31,6 +31,13 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+app.use(function (request, response, next) {
+  if (process.env.NODE_ENV != 'development' && !request.secure) {
+    return response.redirect("https://" + request.headers.host + request.url);
+  }
+  next();
+})
+
 app.get('/', function (req, res) {
   res.render('pages/hovedside');
 });
@@ -160,13 +167,6 @@ app.post('/skjema', function (req, res) {
     })
   }
 });
-
-app.use(function (request, response, next) {
-  if (process.env.NODE_ENV != 'development' && !request.secure) {
-    return response.redirect("https://" + request.headers.host + request.url);
-  }
-  next();
-})
 
 /* setInterval(function () {
   http.get("http://athenæum.no/");
