@@ -161,9 +161,16 @@ app.post('/skjema', function (req, res) {
   }
 });
 
-setInterval(function () {
+app.use(function (request, response, next) {
+  if (process.env.NODE_ENV != 'development' && !request.secure) {
+    return response.redirect("https://" + request.headers.host + request.url);
+  }
+  next();
+})
+
+/* setInterval(function () {
   http.get("http://athenæum.no/");
-}, 1200000);
+}, 1200000); */
 
 app.listen(process.env.PORT || port, () => {
   console.log(`App listening at http://localhost:${port}`)
