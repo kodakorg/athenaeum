@@ -11,62 +11,64 @@
     <%- include('../partials/header') -%>
   </header>
 
-  <div class="bg-white p-3">
-    <h3>Kontaktskjema</h3>
-    <form action="/skjema" id="kontaktskjema" method="post">
-      <div class="mb-3">
-        <label for="fnavn" class="form-label fw-bold">Fornavn:</label>
-        <input type="text" class="form-control" name="fnavn">
-      </div>
-      <div class="mb-3">
-        <label for="enavn" class="form-label fw-bold">Etternavn:</label>
-        <input type="text" class="form-control" name="enavn">
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label fw-bold">E-post:</label>
-        <input type="text" id="email" class="form-control" name="epost">
-      </div>
-      <div class="mb-3">
-        <label for="tlf" class="form-label fw-bold">Telefonnummer:</label>
-        <input type="number" class="form-control" name="tlf">
-      </div>
-      <table>
-        <tr>
-          <td><label class="form-label fw-bold" for="dato">Dato:</label></td>
-          <td><input type="date" id="dato" name="dato"></td>
-        </tr>
-        <tr>
-          <td><label class="form-label fw-bold" for="fra">Fra:</label></td>
-          <td><input type="time" name="fra"></td>
-        </tr>
-        <tr>
-          <td><label class="form-label fw-bold" for="til">Til:</label></td>
-          <td><input type="time" name="til"></td>
-        </tr>
-      </table>
-      <br>
-      <div class="mb-3">
-        <p class="fw-bold fs-6">Hvilket av lokalene vil du leie:</p>
-        <input type="checkbox" id="festsalen" name="festsalen" value="festsalen">
-        <label for="festsalen">Festsalen</label><br>
-        <input type="checkbox" id="salongen" name="salongen" value="salongen">
-        <label for="salongen">Salongen</label><br>
-        <input type="checkbox" id="peisestuen" name="peisestuen" value="peisestuen">
-        <label for="peisestuen">Peisestuen</label><br>
-        <input type="checkbox" id="kjokkenet" name="kjokkenet" value="kjokkenet">
-        <label for="kjokkenet">Kjøkkenet</label><br>
-      </div>
-      <div class="mb-3">
-        <label for="formaal" class="form-label fw-bold">Formål med leien:</label>
-        <textarea class="form-control" id="formaal" name="formaal" rows="3"></textarea>
-      </div>
-      <div>
-        <input id="myCheckbox" type="checkbox" /> Jeg vedtar å ha lest <a href="/vilkaar.txt" id="terms">vilkårene</a>
-        <div id="content-area"></div>
-        <br><br>
-        <button class="btn btn-primary" id="myButton" disabled>Submit</button>
-      </div>
-    </form>
+  <div class="bg-white" style="text-align: center;">
+    <div class="container" style="display: inline-block; text-align: left; max-width: 800px;">
+      <h3>Kontaktskjema</h3>
+      <form action="/skjema" id="kontaktskjema" method="post">
+        <div class="mb-3">
+          <label for="fnavn" class="form-label fw-bold">Fornavn:</label>
+          <input type="text" class="form-control" name="fnavn">
+        </div>
+        <div class="mb-3">
+          <label for="enavn" class="form-label fw-bold">Etternavn:</label>
+          <input type="text" class="form-control" name="enavn">
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label fw-bold">E-post:</label>
+          <input type="text" id="email" class="form-control" name="epost">
+        </div>
+        <div class="mb-3">
+          <label for="tlf" class="form-label fw-bold">Telefonnummer:</label>
+          <input type="number" class="form-control" name="tlf">
+        </div>
+        <table>
+          <tr>
+            <td><label class="form-label fw-bold" for="dato">Dato:</label></td>
+            <td><input type="date" id="dato" name="dato"></td>
+          </tr>
+          <tr>
+            <td><label class="form-label fw-bold" for="fra">Fra:</label></td>
+            <td><input type="time" name="fra"></td>
+          </tr>
+          <tr>
+            <td><label class="form-label fw-bold" for="til">Til:</label></td>
+            <td><input type="time" name="til"></td>
+          </tr>
+        </table>
+        <br>
+        <div class="mb-3">
+          <p class="fw-bold fs-6">Hvilket av lokalene vil du leie:</p>
+          <input type="checkbox" id="festsalen" name="festsalen" value="festsalen">
+          <label for="festsalen">Festsalen</label><br>
+          <input type="checkbox" id="salongen" name="salongen" value="salongen">
+          <label for="salongen">Salongen</label><br>
+          <input type="checkbox" id="peisestuen" name="peisestuen" value="peisestuen">
+          <label for="peisestuen">Peisestuen</label><br>
+          <input type="checkbox" id="kjokkenet" name="kjokkenet" value="kjokkenet">
+          <label for="kjokkenet">Kjøkkenet</label><br>
+        </div>
+        <div class="mb-3">
+          <label for="formaal" class="form-label fw-bold">Formål med leien:</label>
+          <textarea class="form-control" id="formaal" name="formaal" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+          <input id="myCheckbox" type="checkbox" /> Jeg vedtar å ha lest <a href="/vilkaar.txt" id="terms">vilkårene</a>
+          <div id="content-area"></div>
+          <br><br>
+          <button class="btn btn-primary" id="myButton" disabled>Submit</button>
+        </div>
+      </form>
+    </div>
   </div>
   <br>
 

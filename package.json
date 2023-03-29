@@ -4,7 +4,8 @@
   "description": "Hjemmeside til namsos athenaeum",
   "main": "server.js",
   "scripts": {
-    "start": "node server"
+    "start": "node server",
+    "dev": "nodemon -e js,ejs,css server"
   },
   "author": "Ole Severin Hustad",
   "license": "ISC",
