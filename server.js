@@ -60,7 +60,7 @@ app.post('/skjema', function (req, res) {
   var til = req.body.til.toString();
   var tekst = req.body.formaal;
   var html_string = "";
-  html_string += "Fornavn: " + navn + "<br>";
+  html_string += "Navn: " + navn + "<br>";
   html_string += "Epost: " + epost + "<br>";
   html_string += "Telefonnummer: " + tlf + "<br><br>";
   html_string += "Dato: " + dato + " <br>Fra: " + fra + " Til: " + til + "<br><br>";
@@ -134,8 +134,7 @@ app.post('/skjema', function (req, res) {
         name: 'Kontaktskjema Athenæum',
         address: 'kontaktskjema.athenaeum@gmail.com'
       },
-      //to: "namsos.athenaeum@gmail.com",
-      to: "ole.hustad@gmail.com",
+      to: "namsos.athenaeum@gmail.com",
       replyTo: epost,
       subject: 'Bestilling av rom for Namsos Athenæum',
       text: html_string,
