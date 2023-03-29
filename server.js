@@ -52,8 +52,7 @@ app.get('/kontaktskjema', function (req, res) {
 });
 
 app.post('/skjema', function (req, res) {
-  var fnavn = req.body.fnavn;
-  var enavn = req.body.enavn;
+  var navn = req.body.navn;
   var epost = req.body.epost;
   var tlf = req.body.tlf;
   var dato = req.body.dato;
@@ -61,8 +60,7 @@ app.post('/skjema', function (req, res) {
   var til = req.body.til.toString();
   var tekst = req.body.formaal;
   var html_string = "";
-  html_string += "Fornavn: " + fnavn + "<br>";
-  html_string += "Etternavn: " + enavn + "<br><br>";
+  html_string += "Fornavn: " + navn + "<br>";
   html_string += "Epost: " + epost + "<br>";
   html_string += "Telefonnummer: " + tlf + "<br><br>";
   html_string += "Dato: " + dato + " <br>Fra: " + fra + " Til: " + til + "<br><br>";
@@ -95,15 +93,10 @@ app.post('/skjema', function (req, res) {
 
   html_string += "Formålet med leien: " + tekst;
 
-  if (typeof fnavn === 'undefined' || fnavn === null || fnavn === '') {
+  if (typeof navn === 'undefined' || navn === null || navn === '') {
     res.render('pages/tilbakemelding', {
       sjekk: false,
-      message: "Fornavn mangler eller er tom"
-    });
-  } else if (typeof enavn === 'undefined' || enavn === null || enavn === '') {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Etternavn mangler eller er tom"
+      message: "Navn mangler eller er tom"
     });
   } else if (!validateEmail(epost)) {
     res.render('pages/tilbakemelding', {
@@ -141,7 +134,8 @@ app.post('/skjema', function (req, res) {
         name: 'Kontaktskjema Athenæum',
         address: 'kontaktskjema.athenaeum@gmail.com'
       },
-      to: "namsos.athenaeum@gmail.com",
+      //to: "namsos.athenaeum@gmail.com",
+      to: "ole.hustad@gmail.com",
       replyTo: epost,
       subject: 'Bestilling av rom for Namsos Athenæum',
       text: html_string,

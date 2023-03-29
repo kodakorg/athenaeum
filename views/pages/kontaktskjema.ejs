@@ -16,12 +16,8 @@
       <h3>Kontaktskjema</h3>
       <form action="/skjema" id="kontaktskjema" method="post">
         <div class="mb-3">
-          <label for="fnavn" class="form-label fw-bold">Fornavn:</label>
-          <input type="text" class="form-control" name="fnavn">
-        </div>
-        <div class="mb-3">
-          <label for="enavn" class="form-label fw-bold">Etternavn:</label>
-          <input type="text" class="form-control" name="enavn">
+          <label for="navn" class="form-label fw-bold">Navn:</label>
+          <input type="text" class="form-control" name="navn">
         </div>
         <div class="mb-3">
           <label for="email" class="form-label fw-bold">E-post:</label>
@@ -103,8 +99,7 @@
 
     $("#kontaktskjema").validate({
       rules: {
-        fnavn: "required",
-        enavn: "required",
+        navn: "required",
         epost: {
           required: true,
           email: true
@@ -119,8 +114,7 @@
         formaal: "required"
       },
       messages: {
-        fnavn: "Fornavn må fylles ut",
-        enavn: "Etternavn må fylles ut",
+        navn: "Navn må fylles ut",
         epost: {
           required: "Epost må fylles ut",
           email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
