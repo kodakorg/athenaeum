@@ -11,17 +11,15 @@
     <%- include('../partials/header') -%>
   </header>
 
-  <div class="bg-white p-3" id="tilbakemelding">
+  <div class="pt-3 fira-sans-medium d-flex container justify-content-center" id="tilbakemelding">
     <% if (sjekk) { %>
-      <p>Takk for bestillingen!</p>
-      <p>Skjemaet er sendt til namsos.athenaeum@gmail.com</p>
-      <% } else { %>
-        <p>Feil ved innsending av skjema:</p>
-        <p>Feilmelding: <%= message %>
-        </p>
-        <% } %>
+    Takk for bestillingen!<br>
+    Skjemaet er sendt til namsos.athenaeum@gmail.com
+    <% } else { %>
+    Feil ved innsending av skjema:<br>
+    Feilmelding: <%= message %>
+    <% } %>
   </div>
-  <br>
 
   <footer>
     <%- include('../partials/foother') -%>

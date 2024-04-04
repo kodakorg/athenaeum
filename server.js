@@ -47,6 +47,10 @@ app.get('/lokalene', function (req, res) {
   res.render('pages/lokalene');
 });
 
+app.get('/priser', function (req, res) {
+  res.render('pages/priser');
+});
+
 app.get('/kontaktskjema', function (req, res) {
   res.render('pages/kontaktskjema', { sjekk: false });
 });
@@ -55,40 +59,21 @@ app.post('/skjema', function (req, res) {
   var navn = req.body.navn;
   var epost = req.body.epost;
   var tlf = req.body.tlf;
+  if (tlf === "") {
+    tlf = "Ikke oppgitt";
+  }
   var dato = req.body.dato;
-  var fra = req.body.fra.toString();
-  var til = req.body.til.toString();
   var tekst = req.body.formaal;
   var html_string = "";
   html_string += "Navn: " + navn + "<br>";
   html_string += "Epost: " + epost + "<br>";
-  html_string += "Telefonnummer: " + tlf + "<br><br>";
-  html_string += "Dato: " + dato + " <br>Fra: " + fra + " Til: " + til + "<br><br>";
+  html_string += "Telefonnummer: " + tlf + "<br>";
+  html_string += "Dato: " + dato + " <br>";
 
-  if (req.body.festsalen || req.body.salongen || req.body.peisestuen || req.body.kjokkenet) {
-    html_string += "Lokaler:<br>"
+  if (req.body.lokaler) {
+    html_string += "Lokaler: " + req.body.lokaler + "<br>"
   } else {
-    html_string += "Ingen lokaler huket av i kontaktskjemaet.<br><br>"
-  }
-
-  if (req.body.festsalen) {
-    html_string += "- Festsalen<br>"
-  }
-
-  if (req.body.salongen) {
-    html_string += "- Salongen<br>"
-  }
-
-  if (req.body.peisestuen) {
-    html_string += "- Peisestuen<br>"
-  }
-
-  if (req.body.kjokkenet) {
-    html_string += "- Kjøkkenet<br>"
-  }
-
-  if (req.body.festsalen || req.body.salongen || req.body.peisestuen || req.body.kjokkenet) {
-    html_string += "<br>"
+    html_string += "Ingen lokaler huket av i kontaktskjemaet.<br>"
   }
 
   html_string += "Formålet med leien: " + tekst;
@@ -103,7 +88,7 @@ app.post('/skjema', function (req, res) {
       sjekk: false,
       message: "Epost har feil format"
     });
-  } else if (!/^\d{8}$/.test(tlf)) {
+  } else if (!/^\d{8}$/.test(tlf) && tlf !== "Ikke oppgitt") {
     res.render('pages/tilbakemelding', {
       sjekk: false,
       message: "Telefonnummer må være 8 siffer"
@@ -112,16 +97,6 @@ app.post('/skjema', function (req, res) {
     res.render('pages/tilbakemelding', {
       sjekk: false,
       message: "Dato har feil format"
-    });
-  } else if (!fra.match(/^[012][0-9]:[0-9][0-9]$/)) {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Fra tidspunkt har feil format"
-    });
-  } else if (!til.match(/^[012][0-9]:[0-9][0-9]$/)) {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Til tidspunkt har feil format"
     });
   } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
     res.render('pages/tilbakemelding', {

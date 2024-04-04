@@ -4,6 +4,23 @@ body {
   background: linear-gradient(to right, #1f4075, #373B44);
   font-family: Georgia, 'Times New Roman', Times, serif;
   overflow: visible;
+  color: #d7d7d7
+}
+
+html {
+  overflow-y: scroll;
+}
+
+.fira-sans-regular {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.fira-sans-medium {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 500;
+  font-style: normal;
 }
 
 .error {
@@ -58,7 +75,7 @@ body {
 }
 
 .logo {
-  color: white;
+  color: #d7d7d7;
   text-align: center;
   overflow: hidden;
 }
