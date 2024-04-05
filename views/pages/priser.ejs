@@ -11,13 +11,30 @@
     <%- include('../partials/header') -%>
   </header>
 
-  <pre class="d-flex justify-content-center fs-5 pt-3">
-Festsalen og Salongen:  11.000,-
-Festsalen:               8.000,-
-Salongen:                3.000,-
-Peisestuen:              4.000,-
-Per runde bord:            200,-
-</pre>
+  <div class="container fs-5 pt-3">
+    <table class="d-flex justify-content-center">
+      <tr>
+        <td>Festsalen og Salongen:&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td class="text-end">11.000,-</td>
+      </tr>
+      <tr>
+        <td>Festsalen:</td>
+        <td class="text-end">8.000,-</td>
+      </tr>
+      <tr>
+        <td>Salongen:</td>
+        <td class="text-end">3.000,-</td>
+      </tr>
+      <tr>
+        <td>Peisestuen:</td>
+        <td class="text-end">4.000,-</td>
+      </tr>
+      <tr>
+        <td>Per runde bord:</td>
+        <td class="text-end">200,-</td>
+      </tr>
+    </table>
+  </div>
 
   <script>
     document.getElementById("priser").classList.add("active");

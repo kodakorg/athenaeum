@@ -1,7 +1,7 @@
 body {
   background: #373B44;
   background: -webkit-linear-gradient(to right, #1f4075, #373B44);
-  background: linear-gradient(to right, #1f4075, #373B44);
+  background: linear-gradient(to right, #1f4075 70%, #373B44);
   font-family: Georgia, 'Times New Roman', Times, serif;
   overflow: visible;
   color: #d7d7d7
