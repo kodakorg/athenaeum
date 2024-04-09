@@ -12,7 +12,7 @@
   </header>
 
   <div class="container pt-3 fira-sans-medium" style="max-width: 800px;">
-    <h3>Kontaktskjema</h3>
+    <h3 class="d-none d-md-block">Kontaktskjema</h3>
     <form action="/skjema" id="kontaktskjema" method="post">
       <div class="mb-3">
         <label for="navn" class="form-label">Navn:</label>
@@ -71,6 +71,7 @@
 
   <script>
     document.getElementById("skjema").classList.add("active");
+    document.getElementById("brand").textContent = "Kontaktskjema";
 
     $(document).ready(function () {
       $('#myCheckbox').click(function () {
