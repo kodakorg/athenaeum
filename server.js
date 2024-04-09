@@ -32,7 +32,7 @@ function validateEmail(email) {
 }
 
 app.get('/', function (req, res) {
-  res.render('pages/hovedside');
+  res.render('pages/forside');
 });
 
 app.get('/kalender', function (req, res) {
