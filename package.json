@@ -17,8 +17,11 @@
     "dotenv": "^7.0.0",
     "ejs": "^3.1.8",
     "express": "^4.16.4",
+    "express-session": "^1.18.0",
+    "memorystore": "^1.6.7",
     "morgan": "^1.9.1",
     "nodemailer": "^6.6.2",
-    "serve-favicon": "^2.5.0"
+    "serve-favicon": "^2.5.0",
+    "sqlite3": "^5.1.7"
   }
 }

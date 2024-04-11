@@ -13,8 +13,7 @@
 
   <div class="pt-3 fira-sans-medium d-flex container justify-content-center" id="tilbakemelding">
     <% if (sjekk) { %>
-    Takk for bestillingen!<br>
-    Skjemaet er sendt til namsos.athenaeum@gmail.com
+    <%= message %>
     <% } else { %>
     Feil ved innsending av skjema:<br>
     Feilmelding: <%= message %>

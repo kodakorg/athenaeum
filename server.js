@@ -1,13 +1,21 @@
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const port = 8888
 const nodemailer = require('nodemailer');
-const http = require("http");
+const sqlite3 = require('sqlite3').verbose();
 
 var morgan = require('morgan')
 var favicon = require('serve-favicon');
 var path = require("path");
 require('dotenv').config()
+let db = new sqlite3.Database('logg.db');
+db.run("CREATE TABLE IF NOT EXISTS skjema_logg (logg_dato TEXT,navn TEXT, epost TEXT, tlf TEXT, leie_dato TEXT, tekst TEXT, lokaler TEXT, tilbakemelding TEXT)");
+db.close((err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -17,6 +25,45 @@ app.use(morgan('combined'));
 
 app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
+
+var MemoryStore = require('memorystore')(session)
+app.use(session({
+  secret: 'bbfec636-2575-4983-81cb-7e548a9fe611',
+  cookie: { maxAge: 86400000 },
+  saveUninitialized: false,
+  resave: false,
+  store: new MemoryStore({
+    checkPeriod: 86400000 // prune expired entries every 24h
+  }),
+}))
+
+var authUser = function (req, res, next) {
+  if (req.session && req.session.authenticated) {
+    return next();
+  } else {
+    return res.redirect('/login');
+  }
+};
+
+app.get('/login', function (req, res) {
+  res.render('pages/login');
+});
+
+app.post('/login', function (req, res) {
+  if (req.body.password === process.env.PASSWORD) {
+    req.session.authenticated = true;
+    res.redirect("/logg");
+  } else {
+    res.render('pages/login');
+  }
+});
+
+app.get('/logout', function (req, res) {
+  if (req.session.authenticated) {
+    delete req.session.authenticated;
+  }
+  res.redirect('/login');
+});
 
 const transporter = nodemailer.createTransport({
   service: 'gmail',
@@ -55,77 +102,109 @@ app.get('/kontaktskjema', function (req, res) {
   res.render('pages/kontaktskjema', { sjekk: false });
 });
 
+app.get('/logg', authUser, function (req, res) {
+  let db = new sqlite3.Database('logg.db');
+  db.serialize(function () {
+    db.all("SELECT rowid,* FROM skjema_logg", function (err, rows) {
+      let rader = {};
+      rows.forEach(function (row) {
+        rader[row.rowid] = row;
+      });
+      res.render('pages/logg', {
+        rows: rader
+      });
+    });
+    db.close((err) => {
+      if (err) {
+        return console.error(err.message);
+      }
+    });
+  });
+});
+
 app.post('/skjema', function (req, res) {
-  var navn = req.body.navn;
-  var epost = req.body.epost;
-  var tlf = req.body.tlf;
+  let mailOptions = {};
+  let sjekk = false;
+  let message = "";
+  let db_message = "";
+  let navn = req.body.navn;
+  let epost = req.body.epost;
+  let tlf = req.body.tlf;
   if (tlf === "") {
     tlf = "Ikke oppgitt";
   }
-  var dato = req.body.dato;
-  var tekst = req.body.formaal;
-  var html_string = "";
+  let dato = req.body.dato;
+  let lokaler = req.body.lokaler;
+  if (lokaler === undefined) {
+    lokaler = "Ingen lokaler valgt";
+  }
+  let tekst = req.body.formaal;
+  let html_string = "";
   html_string += "Navn: " + navn + "<br>";
   html_string += "Epost: " + epost + "<br>";
   html_string += "Telefonnummer: " + tlf + "<br>";
   html_string += "Dato: " + dato + " <br>";
-
-  if (req.body.lokaler) {
-    html_string += "Lokaler: " + req.body.lokaler + "<br>"
-  } else {
-    html_string += "Ingen lokaler huket av i kontaktskjemaet.<br>"
-  }
-
+  html_string += "Lokaler: " + req.body.lokaler + "<br>"
   html_string += "Formålet med leien: " + tekst;
 
   if (typeof navn === 'undefined' || navn === null || navn === '') {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Navn mangler eller er tom"
-    });
+    message = "Navn mangler eller er tom";
+    db_message = "Navn mangler";
   } else if (!validateEmail(epost)) {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Epost har feil format"
-    });
-  } else if (!/^\d{8}$/.test(tlf) && tlf !== "Ikke oppgitt") {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Telefonnummer må være 8 siffer"
-    });
+    message = "Epost har feil format";
+    db_message = "Epost feil format";
+  } else if (!/^\+?\d{2,4}?\s?\d{2,3}?\s?\d{2,3}?(?:\s\d{2,3})?(?:\s\d{2})?$/.test(tlf) || !/^\d{8}$/.test(tlf) && tlf !== "Ikke oppgitt") {
+    message = "Telefonnummer har feil format";
+    db_message = "Telefonnummer feil format";
   } else if (!new Date(dato).getTime() > 0) {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Dato har feil format"
-    });
+    message = "Dato har feil format";
+    db_message = "Dato feil format";
   } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
-    res.render('pages/tilbakemelding', {
-      sjekk: false,
-      message: "Forespørsel mangler eller er tom"
-    });
+    message = "Tekstfeltet er tomt";
+    db_message = "Tekstfeltet tomt";
   } else {
-    const mailOptions = {
+    sjekk = true;
+    message = "Skjemaet er sendt inn! Vi tar kontakt med deg så snart som mulig.";
+    db_message = "OK";
+    mailOptions = {
       from: {
         name: 'Kontaktskjema Athenæum',
-        address: 'kontaktskjema.athenaeum@gmail.com'
+        address: process.env.EMAIL_ADDRESS
       },
-      to: "namsos.athenaeum@gmail.com",
+      to: process.env.EMAIL_ADDRESS_TO,
       replyTo: epost,
       subject: 'Bestilling av rom for Namsos Athenæum',
       text: html_string,
       html: html_string
     }
+  }
+  let date_time = new Date().toLocaleString();
+  let db = new sqlite3.Database('logg.db');
+  db.serialize(function () {
+    db.run("INSERT INTO skjema_logg (logg_dato, navn, epost, tlf, leie_dato, tekst, lokaler, tilbakemelding) VALUES (?,?,?,?,?,?,?,?)", date_time, navn, epost, tlf, dato, tekst, lokaler, db_message);
+    db.close((err) => {
+      if (err) {
+        return console.error(err.message);
+      }
+    });
+  });
+  if (sjekk === false) {
+    res.render('pages/kontaktskjema', {
+      sjekk: sjekk,
+      message: message
+    });
+  } else {
     transporter.sendMail(mailOptions, function (err, result) {
       if (err) {
         res.render('pages/tilbakemelding', {
-          sjekk: false,
+          sjekk: sjekk,
           message: err
         });
       } else {
         transporter.close();
-        res.render('pages/tilbakemelding', { sjekk: true });
+        res.render('pages/tilbakemelding', { sjekk: sjekk, message: message });
       }
-    })
+    });
   }
 });
 
