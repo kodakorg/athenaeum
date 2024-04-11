@@ -29,11 +29,11 @@ app.set('trust proxy', 1);
 var MemoryStore = require('memorystore')(session)
 app.use(session({
   secret: 'bbfec636-2575-4983-81cb-7e548a9fe611',
-  cookie: { maxAge: 86400000 },
+  cookie: { maxAge: 2592000000 },
   saveUninitialized: false,
   resave: false,
   store: new MemoryStore({
-    checkPeriod: 86400000 // prune expired entries every 24h
+    checkPeriod: 2592000000 // prune expired entries every 30 days
   }),
 }))
 
