@@ -103,10 +103,11 @@
           email: true
         },
         tlf: {
-          required: false,
+          required: true,
           minlength: 8,
         },
         dato: "required",
+        lokaler: "required",
         formaal: "required"
       },
       messages: {
@@ -116,9 +117,11 @@
           email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
         },
         tlf: {
+          required: "Telefonnummer må fylles ut",
           minlengt: "Telefonnummer må være minimum 8 tall"
         },
         dato: "Dato må fylles ut",
+        lokaler: "Lokale må velges",
         formaal: "Formål må fylles ut"
       }
     });

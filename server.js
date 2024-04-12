@@ -29,11 +29,11 @@ app.set('trust proxy', 1);
 var MemoryStore = require('memorystore')(session)
 app.use(session({
   secret: 'bbfec636-2575-4983-81cb-7e548a9fe611',
-  cookie: { maxAge: 2592000000 },
+  cookie: { maxAge: 2147483647 },
   saveUninitialized: false,
   resave: false,
   store: new MemoryStore({
-    checkPeriod: 2592000000 // prune expired entries every 30 days
+    checkPeriod: 2147483647 // prune expired entries every 30 days
   }),
 }))
 
@@ -130,9 +130,6 @@ app.post('/skjema', function (req, res) {
   let navn = req.body.navn;
   let epost = req.body.epost;
   let tlf = req.body.tlf;
-  if (tlf === "") {
-    tlf = "Ikke oppgitt";
-  }
   let dato = req.body.dato;
   let lokaler = req.body.lokaler;
   if (lokaler === undefined) {
@@ -152,19 +149,22 @@ app.post('/skjema', function (req, res) {
     db_message = "Navn mangler";
   } else if (!validateEmail(epost)) {
     message = "Epost har feil format";
-    db_message = "Epost feil format";
-  } else if (!/^\+?\d{2,4}?\s?\d{2,3}?\s?\d{2,3}?(?:\s\d{2,3})?(?:\s\d{2})?$/.test(tlf) || !/^\d{8}$/.test(tlf) && tlf !== "Ikke oppgitt") {
+    db_message = "Epost feil";
+  } else if (!/^[479]\d{7}$/.test(tlf)) {
     message = "Telefonnummer har feil format";
-    db_message = "Telefonnummer feil format";
-  } else if (!new Date(dato).getTime() > 0) {
-    message = "Dato har feil format";
-    db_message = "Dato feil format";
+    db_message = "Telefonnummer feil";
+  } else if (new Date(dato) < new Date()) {
+    message = "Dato har feil format eller er i fortiden";
+    db_message = "Dato feil";
   } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
     message = "Tekstfeltet er tomt";
     db_message = "Tekstfeltet tomt";
+  } else if (lokaler === "Ingen lokaler valgt") {
+    message = "Du må velge et lokale";
+    db_message = "Lokale ikke valgt";
   } else {
     sjekk = true;
-    message = "Skjemaet er sendt inn! Vi tar kontakt med deg så snart som mulig.";
+    message = "Forespørsel er sendt! Vi tar kontakt med deg så snart som mulig.";
     db_message = "OK";
     mailOptions = {
       from: {
@@ -172,6 +172,7 @@ app.post('/skjema', function (req, res) {
         address: process.env.EMAIL_ADDRESS
       },
       to: process.env.EMAIL_ADDRESS_TO,
+      bcc: epost,
       replyTo: epost,
       subject: 'Bestilling av rom for Namsos Athenæum',
       text: html_string,
@@ -189,7 +190,7 @@ app.post('/skjema', function (req, res) {
     });
   });
   if (sjekk === false) {
-    res.render('pages/kontaktskjema', {
+    res.render('pages/tilbakemelding', {
       sjekk: sjekk,
       message: message
     });
