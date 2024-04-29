@@ -16,60 +16,27 @@
     <h3>Ingen logger</h3>
   </div>
   <% } else { %>
-  <div class="container-fluid">
-    <table class="table table-dark table-striped">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Logg dato</th>
-          <th scope="col">Navn</th>
-          <th scope="col">E-post</th>
-          <th scope="col">Telefon</th>
-          <th scope="col">Dato</th>
-          <th scope="col">Formål</th>
-          <th scope="col">Lokaler</th>
-          <th scope="col">Tilbakemelding</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% let allKeys = Object.keys(rows); %>
-        <% allKeys.reverse(); %>
-        <% for (key of allKeys) { %>
-        <tr>
-          <th scope="row">
-            <%= rows[key].rowid %>
-          </th>
-          <td>
-            <%= rows[key].logg_dato %>
-          </td>
-          <td>
-            <%= rows[key].navn %>
-          </td>
-          <td>
-            <%= rows[key].epost %>
-          </td>
-          <td>
-            <%= rows[key].tlf %>
-          </td>
-          <td>
-            <%= rows[key].leie_dato %>
-          </td>
-          <td>
-            <%= rows[key].tekst %>
-          </td>
-          <td>
-            <%= rows[key].lokaler %>
-          </td>
-          <td>
-            <%= rows[key].tilbakemelding %>
-          </td>
-        </tr>
-        <% } %>
-      </tbody>
-    </table>
-    <form action="/logout" method="post">
-      <button type="submit" class="btn btn-primary btn-lg">Logg ut</button>
-    </form>
+  <div class="container pb-3">
+    <% let allKeys = Object.keys(rows); %>
+    <% allKeys.reverse(); %>
+    <% for (key of allKeys) { %>
+    <a href="/logg/<%= rows[key].rowid %>">
+      <div class="row align-items-start fira-sans-medium text-white m-1 border border-warning border-2">
+        <div class="col"><%= rows[key].rowid %></div>
+        <div class="col d-none d-md-block"><%= rows[key].logg_dato.substring(0, 11) %></div>
+        <div class="col"><%= rows[key].navn.substring(0, 10) %></div>
+        <div class="col d-none d-md-block"><%= rows[key].epost.substring(0, 10) %></div>
+        <div class="col d-none d-md-block"><%= rows[key].tlf %></div>
+        <div class="col d-none d-md-block"><%= rows[key].leie_dato %></div>
+        <div class="col d-none d-md-block"><%= rows[key].tekst.substring(0, 10) %></div>
+        <div class="col d-none d-md-block"><%= rows[key].lokaler.substring(0, 10) %></div>
+        <div class="col"><%= rows[key].tilbakemelding.substring(0, 10) %></div>
+      </div>
+    </a>
+    <% } %>
+  </div>
+  <div class="container pb-3">
+    <a href="/logout" class="btn btn-primary">Logg ut</a>
   </div>
   <% } %>
 

@@ -10,7 +10,7 @@ var favicon = require('serve-favicon');
 var path = require("path");
 require('dotenv').config()
 let db = new sqlite3.Database('logg.db');
-db.run("CREATE TABLE IF NOT EXISTS skjema_logg (logg_dato TEXT,navn TEXT, epost TEXT, tlf TEXT, leie_dato TEXT, tekst TEXT, lokaler TEXT, tilbakemelding TEXT)");
+db.run("CREATE TABLE IF NOT EXISTS skjema_logg (logg_dato TEXT,navn TEXT, epost TEXT, tlf TEXT, leie_dato TEXT, tekst TEXT, lokaler TEXT, tilbakemelding TEXT, ip TEXT, user_agent TEXT)");
 db.close((err) => {
   if (err) {
     return console.error(err.message);
@@ -78,6 +78,18 @@ function validateEmail(email) {
   return re.test(email);
 }
 
+function formatDate(date) {
+  // Extracting date components
+  const year = String(date.getFullYear()).slice(-2);
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  // Concatenating components in the desired format
+  return `${year}${month}${day} ${hours}${minutes}`;
+}
+
 app.get('/', function (req, res) {
   res.render('pages/forside');
 });
@@ -107,11 +119,33 @@ app.get('/logg', authUser, function (req, res) {
   db.serialize(function () {
     db.all("SELECT rowid,* FROM skjema_logg", function (err, rows) {
       let rader = {};
-      rows.forEach(function (row) {
-        rader[row.rowid] = row;
-      });
-      res.render('pages/logg', {
-        rows: rader
+      if (rows === undefined || rows.length == 0) {
+        res.render('pages/logg', {
+          rows: rader
+        });
+      } else {
+        rows.forEach(function (row) {
+          rader[row.rowid] = row;
+        });
+        res.render('pages/logg', {
+          rows: rader
+        });
+      }
+    });
+    db.close((err) => {
+      if (err) {
+        return console.error(err.message);
+      }
+    });
+  });
+});
+
+app.get('/logg/:id', authUser, function (req, res) {
+  let db = new sqlite3.Database('logg.db');
+  db.serialize(function () {
+    db.get("SELECT rowid,* FROM skjema_logg WHERE rowid = ?", req.params.id, function (err, row) {
+      res.render('pages/logg_id', {
+        row: row
       });
     });
     db.close((err) => {
@@ -137,6 +171,8 @@ app.post('/skjema', function (req, res) {
   }
   let tekst = req.body.formaal;
   let html_string = "";
+  let ip = req.ip;
+  let user_agent = req.headers['user-agent'];
   html_string += "Navn: " + navn + "<br>";
   html_string += "Epost: " + epost + "<br>";
   html_string += "Telefonnummer: " + tlf + "<br>";
@@ -146,22 +182,22 @@ app.post('/skjema', function (req, res) {
 
   if (typeof navn === 'undefined' || navn === null || navn === '') {
     message = "Navn mangler eller er tom";
-    db_message = "Navn mangler";
+    db_message = "NAVN";
   } else if (!validateEmail(epost)) {
     message = "Epost har feil format";
-    db_message = "Epost feil";
+    db_message = "EPOST";
   } else if (!/^[479]\d{7}$/.test(tlf)) {
     message = "Telefonnummer har feil format";
-    db_message = "Telefonnummer feil";
+    db_message = "TLF";
   } else if (new Date(dato) < new Date()) {
     message = "Dato har feil format eller er i fortiden";
-    db_message = "Dato feil";
+    db_message = "DATO";
   } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
     message = "Tekstfeltet er tomt";
-    db_message = "Tekstfeltet tomt";
+    db_message = "TEKST";
   } else if (lokaler === "Ingen lokaler valgt") {
     message = "Du må velge et lokale";
-    db_message = "Lokale ikke valgt";
+    db_message = "LOKALET";
   } else {
     sjekk = true;
     message = "Forespørsel er sendt! Vi tar kontakt med deg så snart som mulig.";
@@ -179,10 +215,10 @@ app.post('/skjema', function (req, res) {
       html: html_string
     }
   }
-  let date_time = new Date().toLocaleString();
+  let formatted_date = formatDate(new Date());
   let db = new sqlite3.Database('logg.db');
   db.serialize(function () {
-    db.run("INSERT INTO skjema_logg (logg_dato, navn, epost, tlf, leie_dato, tekst, lokaler, tilbakemelding) VALUES (?,?,?,?,?,?,?,?)", date_time, navn, epost, tlf, dato, tekst, lokaler, db_message);
+    db.run("INSERT INTO skjema_logg (logg_dato, navn, epost, tlf, leie_dato, tekst, lokaler, tilbakemelding, ip, user_agent) VALUES (?,?,?,?,?,?,?,?,?,?)", formatted_date, navn, epost, tlf, dato, tekst, lokaler, db_message, ip, user_agent);
     db.close((err) => {
       if (err) {
         return console.error(err.message);
@@ -195,17 +231,28 @@ app.post('/skjema', function (req, res) {
       message: message
     });
   } else {
-    transporter.sendMail(mailOptions, function (err, result) {
-      if (err) {
-        res.render('pages/tilbakemelding', {
-          sjekk: sjekk,
-          message: err
-        });
-      } else {
-        transporter.close();
-        res.render('pages/tilbakemelding', { sjekk: sjekk, message: message });
-      }
-    });
+    if (process.env.NODE_ENV === 'production') {
+      transporter.verify(function (error, success) {
+        if (error) {
+          console.log(error);
+        } else {
+          transporter.sendMail(mailOptions, function (err, result) {
+            if (err) {
+              res.render('pages/tilbakemelding', {
+                sjekk: sjekk,
+                message: err
+              });
+            } else {
+              transporter.close();
+              res.render('pages/tilbakemelding', { sjekk: sjekk, message: message });
+            }
+          });
+        }
+      });
+    } else if (process.env.NODE_ENV === 'development') {
+      console.log(mailOptions);
+      res.render('pages/tilbakemelding', { sjekk: sjekk, message: message });
+    }
   }
 });
 
