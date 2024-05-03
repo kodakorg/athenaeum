@@ -171,7 +171,7 @@ app.post('/skjema', function (req, res) {
   }
   let tekst = req.body.formaal;
   let html_string = "";
-  let ip = req.ip;
+  let ip = req.header('x-forwarded-for');
   let user_agent = req.headers['user-agent'];
   html_string += "Navn: " + navn + "<br>";
   html_string += "Epost: " + epost + "<br>";
