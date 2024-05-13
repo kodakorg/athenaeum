@@ -189,7 +189,7 @@ app.post('/skjema', function (req, res) {
   } else if (!/^[479]\d{7}$/.test(tlf)) {
     message = "Telefonnummer har feil format";
     db_message = "TLF";
-  } else if (new Date(dato) < new Date()) {
+  } else if (typeof dato === 'undefined' || dato === null || dato === '' || new Date(dato) < new Date()) {
     message = "Dato har feil format eller er i fortiden";
     db_message = "DATO";
   } else if (typeof tekst === 'undefined' || tekst === null || tekst === '') {
