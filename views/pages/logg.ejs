@@ -21,7 +21,7 @@
     <% allKeys.reverse(); %>
     <% for (key of allKeys) { %>
     <a href="/logg/<%= rows[key].rowid %>">
-      <div class="row align-items-start fira-sans-medium text-white m-1 border border-warning border-2">
+      <div class="row align-items-start fira-sans-medium text-white m-1 border border-success border-2">
         <div class="col"><%= rows[key].rowid %></div>
         <div class="col d-none d-md-block"><%= rows[key].logg_dato.substring(0, 11) %></div>
         <div class="col"><%= rows[key].navn.substring(0, 10) %></div>
@@ -30,7 +30,11 @@
         <div class="col d-none d-md-block"><%= rows[key].leie_dato %></div>
         <div class="col d-none d-md-block"><%= rows[key].tekst.substring(0, 10) %></div>
         <div class="col d-none d-md-block"><%= rows[key].lokaler.substring(0, 10) %></div>
-        <div class="col"><%= rows[key].tilbakemelding.substring(0, 10) %></div>
+        <% if (rows[key].tilbakemelding === "OK") { %>
+        <div class="col" style="color:yellow;"><%= rows[key].tilbakemelding.substring(0, 10) %></div>
+        <% } else { %>
+        <div class="col text-danger"><%= rows[key].tilbakemelding.substring(0, 10) %></div>
+        <% } %>
       </div>
     </a>
     <% } %>
