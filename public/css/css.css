@@ -2,15 +2,88 @@ body {
   background: #050f30;
   font-family: Georgia, 'Times New Roman', Times, serif;
   overflow: visible;
-  color: #d7d7d7
+  color: #d7d7d7;
 }
 
-.custom-toggler .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(196, 61, 61, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+.navbar-toggler {
+  border: none;
+  padding: 0;
 }
 
-.navbar .navbar-toggler {
-  border-color: rgb(196, 61, 61);
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.navbar-toggler .toggler-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  /* Space between icon and text */
+}
+
+.navbar-toggler .icon-container {
+  width: 30px;
+  height: 20px;
+  position: relative;
+}
+
+.navbar-toggler .icon-bar {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #d7d7d7;
+  position: absolute;
+  transition: all 0.3s;
+}
+
+.navbar-toggler .top-bar {
+  top: 0;
+}
+
+.navbar-toggler .middle-bar {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.navbar-toggler .bottom-bar {
+  bottom: 0;
+}
+
+/* Hamburger icon (default state) */
+.navbar-toggler .top-bar {
+  transform: rotate(0);
+}
+
+.navbar-toggler .middle-bar {
+  opacity: 1;
+}
+
+.navbar-toggler .bottom-bar {
+  transform: rotate(0);
+}
+
+/* X icon (when expanded) */
+.navbar-toggler:not(.collapsed) .top-bar {
+  transform: rotate(45deg);
+  transform-origin: 10% 10%;
+}
+
+.navbar-toggler:not(.collapsed) .middle-bar {
+  opacity: 0;
+}
+
+.navbar-toggler:not(.collapsed) .bottom-bar {
+  transform: rotate(-45deg);
+  transform-origin: 10% 90%;
+}
+
+/* Text styling */
+.navbar-toggler .toggler-text {
+  font-size: 20px;
+  /* Adjust this to match your icon size */
+  color: #d7d7d7;
+  letter-spacing: 1px;
 }
 
 html {
@@ -121,6 +194,18 @@ a.header_href:active {
 
 .navbar .navbar-nav .active {
   color: #d7d7d7;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar .navbar-nav .active {
+    color: #d7d7d7;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .navbar .navbar-nav .active {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 600px) {
