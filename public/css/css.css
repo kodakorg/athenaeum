@@ -5,6 +5,10 @@ body {
   color: #d7d7d7;
 }
 
+.navbar {
+  background: #0d1e55;
+}
+
 .navbar-toggler {
   border: none;
   padding: 0;
@@ -80,7 +84,7 @@ body {
 
 /* Text styling */
 .navbar-toggler .toggler-text {
-  font-size: 20px;
+  font-size: 18px;
   /* Adjust this to match your icon size */
   color: #d7d7d7;
   letter-spacing: 1px;
@@ -161,7 +165,8 @@ html {
 }
 
 .middle {
-  font-size: 3em;
+  font-size: 2em;
+  line-height: 35px;
 }
 
 .lined:before,
