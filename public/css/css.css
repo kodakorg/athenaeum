@@ -126,26 +126,6 @@ html {
   height: 100%;
 }
 
-@media screen and (min-width: 768px) {
-  .deskContent {
-    display: block;
-  }
-
-  .phoneContent {
-    display: none;
-  }
-}
-
-@media screen and (max-width: 767px) {
-  .deskContent {
-    display: none;
-  }
-
-  .phoneContent {
-    display: block;
-  }
-}
-
 #content-area {
   display: none;
   height: 800px;
@@ -198,19 +178,40 @@ a.header_href:active {
   text-decoration: none;
 }
 
-.navbar .navbar-nav .active {
-  color: #d7d7d7;
-}
-
 @media screen and (min-width: 768px) {
+  .navbar {
+    background: #050f30;
+  }
+
   .navbar .navbar-nav .active {
-    color: #d7d7d7;
+    color: #0c922d;
+  }
+
+  .deskContent {
+    display: block;
+  }
+
+  .phoneContent {
+    display: none;
   }
 }
 
 @media screen and (max-width: 767px) {
+  .navbar {
+    background: #d7d7d7;
+    color: #050f30;
+  }
+
   .navbar .navbar-nav .active {
     display: none;
+  }
+
+  .deskContent {
+    display: none;
+  }
+
+  .phoneContent {
+    display: block;
   }
 }
 
