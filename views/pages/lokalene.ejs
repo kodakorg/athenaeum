@@ -1,31 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <%- include('../partials/head') -%>
-</head>
+<%- include('../partials/head') -%>
 
 <body>
 
   <%- include('../partials/header') -%>
 
-    <div class="pt-3 fira-sans-medium justify-content-center container" style="max-width: 800px;">
-      <h3>Festsalen</h3>
-      <img class="img-fluid mb-3" src="images/festsalen.jpg" alt="festsalen"><br>
-      <h3>Salongen</h3>
-      <img class="img-fluid mb-3" src="images/salongen.jpg" alt="salongen"><br>
-      <h3>Peisestuen</h3>
-      <img class="img-fluid mb-3" src="images/peisestuen.jpg" alt="peisestuen"><br>
-      <h3>Kjøkkenet</h3>
-      <img class="img-fluid mb-3" src="images/kjoekkenet.jpg" alt="kjøkkenet"><br>
-    </div>
+  <div class="pt-3 fira-sans-medium justify-content-center container" style="max-width: 800px;">
+    <h3>Festsalen</h3>
+    <img class="img-fluid mb-3" src="images/festsalen.jpg" alt="festsalen"><br>
+    <h3>Salongen</h3>
+    <img class="img-fluid mb-3" src="images/salongen.jpg" alt="salongen"><br>
+    <h3>Peisestuen</h3>
+    <img class="img-fluid mb-3" src="images/peisestuen.jpg" alt="peisestuen"><br>
+    <h3>Kjøkkenet</h3>
+    <img class="img-fluid mb-3" src="images/kjoekkenet.jpg" alt="kjøkkenet"><br>
+  </div>
 
-    <script>
-      document.getElementById("lokalene").classList.add("active");
-      document.getElementById("brand").textContent = "Lokalene";
-    </script>
+  <script>
+    document.getElementById("lokalene").classList.add("active");
+    document.getElementById("brand").textContent = "Lokalene";
+  </script>
 
-    <%- include('../partials/foother') -%>
+  <%- include('../partials/foother') -%>
 
 </body>
 

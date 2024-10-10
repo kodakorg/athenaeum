@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <%- include('../partials/head') -%>
-</head>
+<%- include('../partials/head') -%>
 
 <body>
 
   <%- include('../partials/header') -%>
 
-    <div class="container" style="max-width: 600px;">
-      <form action="/login" method="post">
-        <input type="password" class="form-control mb-3" name="password" placeholder="Password" autofocus>
-        <button type="submit" class="btn btn-primary btn-lg">Logg inn</button>
-      </form>
-    </div>
+  <div class="container" style="max-width: 600px;">
+    <form action="/login" method="post">
+      <input type="password" class="form-control mb-3" name="password" placeholder="Password" autofocus>
+      <button type="submit" class="btn btn-primary btn-lg">Logg inn</button>
+    </form>
+  </div>
 
-    <script>
-      document.getElementById("brand").textContent = "Login";
-    </script>
+  <script>
+    document.getElementById("brand").textContent = "Login";
+  </script>
 
-    <%- include('../partials/foother') -%>
+  <%- include('../partials/foother') -%>
 
 </body>
 

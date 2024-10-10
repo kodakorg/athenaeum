@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-  <%- include('../partials/head') -%>
-</head>
+<%- include('../partials/head') -%>
 
 <body>
 
   <%- include('../partials/header') -%>
 
-    <div class="pt-3 fira-sans-medium d-flex container justify-content-center" id="tilbakemelding">
-      <% if (sjekk) { %>
-        <%= message %>
-          <% } else { %>
-            Feil ved innsending av skjema:<br>
-            Feilmelding: <%= message %>
-              <% } %>
-    </div>
+  <div class="pt-3 fira-sans-medium d-flex container justify-content-center" id="tilbakemelding">
+    <% if (sjekk) { %>
+    <%= message %>
+    <% } else { %>
+    Feil ved innsending av skjema:<br>
+    Feilmelding: <%= message %>
+    <% } %>
+  </div>
 
-    <%- include('../partials/foother') -%>
+  <%- include('../partials/foother') -%>
 
 </body>
 
