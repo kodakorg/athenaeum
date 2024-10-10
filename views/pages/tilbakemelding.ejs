@@ -7,22 +7,18 @@
 
 <body>
 
-  <header>
-    <%- include('../partials/header') -%>
-  </header>
+  <%- include('../partials/header') -%>
 
-  <div class="pt-3 fira-sans-medium d-flex container justify-content-center" id="tilbakemelding">
-    <% if (sjekk) { %>
-    <%= message %>
-    <% } else { %>
-    Feil ved innsending av skjema:<br>
-    Feilmelding: <%= message %>
-    <% } %>
-  </div>
+    <div class="pt-3 fira-sans-medium d-flex container justify-content-center" id="tilbakemelding">
+      <% if (sjekk) { %>
+        <%= message %>
+          <% } else { %>
+            Feil ved innsending av skjema:<br>
+            Feilmelding: <%= message %>
+              <% } %>
+    </div>
 
-  <footer>
     <%- include('../partials/foother') -%>
-  </footer>
 
 </body>
 

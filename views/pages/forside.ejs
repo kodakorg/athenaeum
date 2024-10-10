@@ -7,37 +7,33 @@
 
 <body>
 
-  <header>
-    <%- include('../partials/header') -%>
-  </header>
+  <%- include('../partials/header') -%>
 
-  <div class="pt-4 fs-6 container fira-sans-medium justify-content-center" style="max-width: 750px;">
-    <img id="athimage" class="img-fluid mb-3" src="images/athenaeum_no_edge.jpg" alt="Athenaeum Namsos">
-    <p>
-      Namsos Athenæum ligger sentralt i Namsos sentrum, nærmere bestemt i Sverres gate 1.
-      Lokalet har festsal med plass til ca. 140 personer, salong med 44 sitteplasser og peisestue som kan dekkes til
-      ca.
-      40 personer.
-    </p>
-    <p>
-      Forespørsel om leie gjøres på <a href="/kontaktskjema">kontaktskjema</a>.
-    </p>
-    <p>
-      Vi gjør oppmerksom på at <a href="/vilkaar">vilkår</a> for utleie gjelder.
-    </p>
-    <p>
-      For priser, se <a href="/priser">priser</a>.
-    </p>
-  </div>
+    <div class="pt-4 fs-6 container fira-sans-medium justify-content-center" style="max-width: 750px;">
+      <img id="athimage" class="img-fluid mb-3" src="images/athenaeum_no_edge.jpg" alt="Athenaeum Namsos">
+      <p>
+        Namsos Athenæum ligger sentralt i Namsos sentrum, nærmere bestemt i Sverres gate 1.
+        Lokalet har festsal med plass til ca. 140 personer, salong med 44 sitteplasser og peisestue som kan dekkes til
+        ca.
+        40 personer.
+      </p>
+      <p>
+        Forespørsel om leie gjøres på <a href="/kontaktskjema">kontaktskjema</a>.
+      </p>
+      <p>
+        Vi gjør oppmerksom på at <a href="/vilkaar">vilkår</a> for utleie gjelder.
+      </p>
+      <p>
+        For priser, se <a href="/priser">priser</a>.
+      </p>
+    </div>
 
-  <script>
-    document.getElementById("forside").classList.add("active");
-    document.getElementById("brand").textContent = "Forside";
-  </script>
+    <script>
+      document.getElementById("forside").classList.add("active");
+      document.getElementById("brand").textContent = "Forside";
+    </script>
 
-  <footer>
     <%- include('../partials/foother') -%>
-  </footer>
 
 </body>
 

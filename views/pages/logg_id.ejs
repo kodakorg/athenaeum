@@ -7,39 +7,57 @@
 
 <body>
 
-    <header>
-        <%- include('../partials/header') -%>
-    </header>
+    <%- include('../partials/header') -%>
 
-    <% if (Object.keys(row).length === 0) { %>
-    <div class="container text-center">
-        <h3>Ingen logger</h3>
-    </div>
-    <% } else { %>
-    <div class="container justify-content-center fira-sans-medium" style="max-width: 600px;">
-        <div><span class="text-primary">Id: </span><%= row.rowid %></div>
-        <div><span class="text-primary">Dato: </span><%= row.logg_dato %></div>
-        <div><span class="text-primary">Navn: </span><%= row.navn %></div>
-        <div><span class="text-primary">Epost: </span><%= row.epost %></div>
-        <div><span class="text-primary">Tlf: </span><%= row.tlf %></div>
-        <div><span class="text-primary">Dato leie: </span><%= row.leie_dato %></div>
-        <div><span class="text-primary">Formål: </span><%= row.tekst %></div>
-        <div><span class="text-primary">Lokaler: </span><%= row.lokaler %></div>
-        <div><span class="text-primary">Tilbakemelding: </span><%= row.tilbakemelding %></div>
-        <div><span class="text-primary">Ip: </span><%= row.ip %></div>
-        <div><span class="text-primary">User-Agent: </span><%= row.user_agent %></div>
-        <a href="/logg" class="btn btn-primary">Tilbake</a>
-        <a href="/logout" class="btn btn-primary">Logg ut</a>
-    </div>
-    <% } %>
+        <% if (Object.keys(row).length===0) { %>
+            <div class="container text-center">
+                <h3>Ingen logger</h3>
+            </div>
+            <% } else { %>
+                <div class="container justify-content-center fira-sans-medium" style="max-width: 600px;">
+                    <div><span class="text-primary">Id: </span>
+                        <%= row.rowid %>
+                    </div>
+                    <div><span class="text-primary">Dato: </span>
+                        <%= row.logg_dato %>
+                    </div>
+                    <div><span class="text-primary">Navn: </span>
+                        <%= row.navn %>
+                    </div>
+                    <div><span class="text-primary">Epost: </span>
+                        <%= row.epost %>
+                    </div>
+                    <div><span class="text-primary">Tlf: </span>
+                        <%= row.tlf %>
+                    </div>
+                    <div><span class="text-primary">Dato leie: </span>
+                        <%= row.leie_dato %>
+                    </div>
+                    <div><span class="text-primary">Formål: </span>
+                        <%= row.tekst %>
+                    </div>
+                    <div><span class="text-primary">Lokaler: </span>
+                        <%= row.lokaler %>
+                    </div>
+                    <div><span class="text-primary">Tilbakemelding: </span>
+                        <%= row.tilbakemelding %>
+                    </div>
+                    <div><span class="text-primary">Ip: </span>
+                        <%= row.ip %>
+                    </div>
+                    <div><span class="text-primary">User-Agent: </span>
+                        <%= row.user_agent %>
+                    </div>
+                    <a href="/logg" class="btn btn-primary">Tilbake</a>
+                    <a href="/logout" class="btn btn-primary">Logg ut</a>
+                </div>
+                <% } %>
 
-    <script>
-        document.getElementById("brand").textContent = "Logg Id";
-    </script>
+                    <script>
+                        document.getElementById("brand").textContent = "Logg Id";
+                    </script>
 
-    <footer>
-        <%- include('../partials/foother') -%>
-    </footer>
+                    <%- include('../partials/foother') -%>
 
 </body>
 

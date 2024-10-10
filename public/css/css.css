@@ -198,7 +198,15 @@ a.header_href:active {
   }
 
   .logo {
-    background: #020922;
+    background: #01071d;
+  }
+
+  .body {
+    background: #01071d;
+  }
+
+  .bdy {
+    background: #050f30;
   }
 
   a.nav-link {

@@ -7,127 +7,122 @@
 
 <body>
 
-  <header>
-    <%- include('../partials/header') -%>
-  </header>
+  <%- include('../partials/header') -%>
 
-  <div class="container pt-3 fira-sans-medium" style="max-width: 800px;">
-    <h3 class="d-none d-md-block">Kontaktskjema</h3>
-    <form action="/skjema" id="kontaktskjema" method="post">
-      <div class="mb-3">
-        <label for="navn" class="form-label">Navn:</label>
-        <input type="text" class="form-control" name="navn">
-      </div>
-      <div class="mb-3">
-        <label for="email" class="form-label">E-post:</label>
-        <input type="text" id="email" class="form-control" name="epost">
-      </div>
-      <div class="mb-3">
-        <label for="tlf" class="form-label">Telefon:</label>
-        <input type="number" class="form-control" name="tlf">
-      </div>
-      <div class="mb-5">
-        <label class="form-label" for="dato">Dato:</label><br>
-        <input type="date" id="dato" name="dato">
-      </div>
-      <div class="mb-5">
-        <p>Hvilket av lokalene vil du leie:</p>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="festsalenogsalongen" name="lokaler"
-            value="Festsalen og Salongen">
-          <label class="form-check-label" for="festsalenogsalongen">Festsalen og Salongen</label><br>
+    <div class="container pt-3 fira-sans-medium" style="max-width: 800px;">
+      <h3 class="d-none d-md-block">Kontaktskjema</h3>
+      <form action="/skjema" id="kontaktskjema" method="post">
+        <div class="mb-3">
+          <label for="navn" class="form-label">Navn:</label>
+          <input type="text" class="form-control" name="navn">
         </div>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="festsalen" name="lokaler" value="Festsalen">
-          <label class="form-check-label" for="festsalen">Festsalen</label><br>
+        <div class="mb-3">
+          <label for="email" class="form-label">E-post:</label>
+          <input type="text" id="email" class="form-control" name="epost">
         </div>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="salongen" name="lokaler" value="Salongen">
-          <label class="form-check-label" for="salongen">Salongen</label><br>
+        <div class="mb-3">
+          <label for="tlf" class="form-label">Telefon:</label>
+          <input type="number" class="form-control" name="tlf">
         </div>
-        <div class="form-check">
-          <input type="radio" class="form-check-input" id="peisestuen" name="lokaler" value="Peisestuen">
-          <label class="form-check-label" for="peisestuen">Peisestuen</label><br>
+        <div class="mb-5">
+          <label class="form-label" for="dato">Dato:</label><br>
+          <input type="date" id="dato" name="dato">
         </div>
-      </div>
-      <div class="mb-3">
-        <label for="formaal" class="form-label">Formål med leien:</label>
-        <textarea class="form-control" id="formaal" name="formaal" rows="4"></textarea>
-      </div>
-      <div class="mb-3">
-        <input id="myCheckbox" type="checkbox">
-        <label for="myCheckbox">Jeg vedtar å ha lest <a href="/vilkaar.txt" id="terms">vilkårene</a></label>
-        <div id="content-area"></div>
-        <br><br>
-        <button class="btn btn-primary" id="myButton" disabled>Send</button>
-      </div>
-    </form>
-  </div>
-  <br>
-
-  <footer>
+        <div class="mb-5">
+          <p>Hvilket av lokalene vil du leie:</p>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="festsalenogsalongen" name="lokaler"
+              value="Festsalen og Salongen">
+            <label class="form-check-label" for="festsalenogsalongen">Festsalen og Salongen</label><br>
+          </div>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="festsalen" name="lokaler" value="Festsalen">
+            <label class="form-check-label" for="festsalen">Festsalen</label><br>
+          </div>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="salongen" name="lokaler" value="Salongen">
+            <label class="form-check-label" for="salongen">Salongen</label><br>
+          </div>
+          <div class="form-check">
+            <input type="radio" class="form-check-input" id="peisestuen" name="lokaler" value="Peisestuen">
+            <label class="form-check-label" for="peisestuen">Peisestuen</label><br>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="formaal" class="form-label">Formål med leien:</label>
+          <textarea class="form-control" id="formaal" name="formaal" rows="4"></textarea>
+        </div>
+        <div class="mb-3">
+          <input id="myCheckbox" type="checkbox">
+          <label for="myCheckbox">Jeg vedtar å ha lest <a href="/vilkaar.txt" id="terms">vilkårene</a></label>
+          <div id="content-area"></div>
+          <br><br>
+          <button class="btn btn-primary" id="myButton" disabled>Send</button>
+        </div>
+      </form>
+    </div>
+    <br>
     <%- include('../partials/foother') -%>
-  </footer>
+      <script>
+        document.getElementById("skjema").classList.add("active");
+        document.getElementById("brand").textContent = "Kontaktskjema";
 
-  <script>
-    document.getElementById("skjema").classList.add("active");
-    document.getElementById("brand").textContent = "Kontaktskjema";
+        $(document).ready(function () {
+          $('#myCheckbox').click(function () {
+            $('#myButton').prop("disabled", !$("#myCheckbox").prop("checked"));
+          })
+        });
 
-    $(document).ready(function () {
-      $('#myCheckbox').click(function () {
-        $('#myButton').prop("disabled", !$("#myCheckbox").prop("checked"));
-      })
-    });
-
-    jQuery.fn.terms_agree = function (content_area, selector) {
-      var body = $(body);
-      $(this).click(function () {
-        body.css("height", "auto").css("height", body.height()); // Prevent page flicker on slideup
-        if ($(content_area).html() == "") {
-          $(content_area).load($(this).attr("href") + (selector ? " " + selector : ""));
+        jQuery.fn.terms_agree = function (content_area, selector) {
+          var body = $(body);
+          $(this).click(function () {
+            body.css("height", "auto").css("height", body.height()); // Prevent page flicker on slideup
+            if ($(content_area).html() == "") {
+              $(content_area).load($(this).attr("href") + (selector ? " " + selector : ""));
+            }
+            $(content_area).slideToggle();
+            return false;
+          });
         }
-        $(content_area).slideToggle();
-        return false;
-      });
-    }
 
-    $(function () {
-      $("#terms").terms_agree("#content-area");
-    });
+        $(function () {
+          $("#terms").terms_agree("#content-area");
+        });
 
-    $("#kontaktskjema").validate({
-      rules: {
-        navn: "required",
-        epost: {
-          required: true,
-          email: true
-        },
-        tlf: {
-          required: true,
-          minlength: 8,
-          maxlength: 8
-        },
-        dato: "required",
-        lokaler: "required",
-        formaal: "required"
-      },
-      messages: {
-        navn: "Navn må fylles ut",
-        epost: {
-          required: "Epost må fylles ut",
-          email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
-        },
-        tlf: {
-          required: "Telefonnummer må fylles ut",
-          minlengt: "Telefonnummer må være 8 tall",
-          maxlength: "Telefonnummer må være 8 tall"
-        },
-        dato: "Dato må fylles ut",
-        lokaler: "Lokale må velges",
-        formaal: "Formål må fylles ut"
-      }
-    });
-  </script>
+        $("#kontaktskjema").validate({
+          rules: {
+            navn: "required",
+            epost: {
+              required: true,
+              email: true
+            },
+            tlf: {
+              required: true,
+              minlength: 8,
+              maxlength: 8
+            },
+            dato: "required",
+            lokaler: "required",
+            formaal: "required"
+          },
+          messages: {
+            navn: "Navn må fylles ut",
+            epost: {
+              required: "Epost må fylles ut",
+              email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
+            },
+            tlf: {
+              required: "Telefonnummer må fylles ut",
+              minlengt: "Telefonnummer må være 8 tall",
+              maxlength: "Telefonnummer må være 8 tall"
+            },
+            dato: "Dato må fylles ut",
+            lokaler: "Lokale må velges",
+            formaal: "Formål må fylles ut"
+          }
+        });
+      </script>
+
 
 </body>
 

@@ -7,24 +7,20 @@
 
 <body>
 
-  <header>
-    <%- include('../partials/header') -%>
-  </header>
+  <%- include('../partials/header') -%>
 
-  <div class="container" style="max-width: 600px;">
-    <form action="/login" method="post">
-      <input type="password" class="form-control mb-3" name="password" placeholder="Password" autofocus>
-      <button type="submit" class="btn btn-primary btn-lg">Logg inn</button>
-    </form>
-  </div>
+    <div class="container" style="max-width: 600px;">
+      <form action="/login" method="post">
+        <input type="password" class="form-control mb-3" name="password" placeholder="Password" autofocus>
+        <button type="submit" class="btn btn-primary btn-lg">Logg inn</button>
+      </form>
+    </div>
 
-  <script>
-    document.getElementById("brand").textContent = "Login";
-  </script>
+    <script>
+      document.getElementById("brand").textContent = "Login";
+    </script>
 
-  <footer>
     <%- include('../partials/foother') -%>
-  </footer>
 
 </body>
 
