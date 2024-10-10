@@ -178,10 +178,6 @@ a.header_href:active {
 }
 
 @media screen and (min-width: 768px) {
-  .navbar {
-    background: #050f30;
-  }
-
   .navbar .navbar-nav .active {
     color: #0c922d;
   }
@@ -197,8 +193,12 @@ a.header_href:active {
 
 @media screen and (max-width: 767px) {
   .navbar {
-    background: #2e014e;
+    background: #01071d;
     color: #d7d7d7;
+  }
+
+  .logo {
+    background: #020922;
   }
 
   a.nav-link {
