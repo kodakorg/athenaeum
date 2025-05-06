@@ -5,13 +5,43 @@ on:
   pull_request:
     branches: [ main ]
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted, runner-node]
     steps:
-      - name: Run a multi-line script
+      - name: Setenv
         run: |
-          cd /home/zom/athenaeum
-          git pull
-          npm i
-          sudo systemctl restart athenaeum
+          echo "URL=athenaeum.no" >>$GITHUB_ENV
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update
+        run: |
+          TARGET_DIR="/home/zom/${{ env.URL }}"
+          REPO_URL="git@github.com:${{ github.repository }}.git"
+
+          if [ ! -d "$TARGET_DIR" ]; then
+            echo "Directory does not exist, creating and cloning repository..."
+            mkdir -p "$TARGET_DIR"
+            git clone "$REPO_URL" "$TARGET_DIR" || { echo "Git clone failed"; exit 1; }
+            pushd "$TARGET_DIR"
+          else
+            echo "Directory exists, pulling latest changes..."
+            pushd "$TARGET_DIR"
+            git pull || { echo "Git pull failed"; exit 1; }
+          fi
+
+          npm ci || { echo "NPM install failed"; exit 1; }
+          popd
+          sudo systemctl restart ${{ env.URL }} || { echo "Service restart failed"; exit 1; }
+        working-directory: ${{ github.workspace }}
+
+      - name: Verify
+        run: |
+          sleep 5
+          sudo systemctl is-active ${{ env.URL }} || { echo "Service failed to start"; exit 1; }
