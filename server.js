@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use('/css', express.static(path.join(__dirname, 'public/css')))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(morgan('combined'));
+app.use(morgan('common'));
 
 app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
