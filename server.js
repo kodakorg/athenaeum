@@ -4,11 +4,32 @@ const app = express();
 const port = 8888
 const nodemailer = require('nodemailer');
 const sqlite3 = require('sqlite3').verbose();
-
-var morgan = require('morgan')
-var favicon = require('serve-favicon');
-var path = require("path");
+const morgan = require('morgan')
+const favicon = require('serve-favicon');
+const path = require("path");
 require('dotenv').config()
+const rfs = require('rotating-file-stream');
+
+// Create a rotating write stream
+const accessLogStream = rfs.createStream('access.log', {
+  interval: '1d',    // Rotate daily
+  maxFiles: 30,      // Keep 30 files
+  path: path.join(__dirname, 'logs'),
+  compress: 'gzip'   // Compress old logs
+});
+
+morgan.format('file', [
+  ':req[x-forwarded-for]',
+  '[:date[clf]]',
+  '":method :url HTTP/:http-version"',
+  ':status',
+  ':res[content-length]',
+  ':response-time ms',
+  '":referrer"',
+  '":req[accept-language]"',
+  '":user-agent"',
+].join(' '));
+
 let db = new sqlite3.Database('logg.db');
 db.run("CREATE TABLE IF NOT EXISTS skjema_logg (logg_dato TEXT,navn TEXT, epost TEXT, tlf TEXT, leie_dato TEXT, tekst TEXT, lokaler TEXT, tilbakemelding TEXT, ip TEXT, user_agent TEXT)");
 db.close((err) => {
@@ -21,10 +42,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use('/css', express.static(path.join(__dirname, 'public/css')))
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(morgan(':remote-addr [:method :url :http-version] :status'));
 
 app.set('view engine', 'ejs');
 app.set('trust proxy', 1);
+
+app.use(morgan('file', { stream: accessLogStream }));
 
 var MemoryStore = require('memorystore')(session)
 app.use(session({
@@ -254,6 +276,10 @@ app.post('/skjema', function (req, res) {
       res.render('pages/tilbakemelding', { sjekk: sjekk, message: message });
     }
   }
+});
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
 });
 
 app.listen(process.env.PORT || port, () => {
