@@ -1,6 +1,30 @@
+/* public/css.css */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('../fonts/InterVariable.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Fira Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/FiraSans-Medium.ttf') format('truetype');
+}
+
+.fira-sans-medium {
+  font-family: 'Fira Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
 body {
   background: #050f30;
-  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
   overflow: visible;
   color: #d7d7d7;
 }
@@ -23,7 +47,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  /* Space between icon and text */
 }
 
 .navbar-toggler .icon-container {
@@ -54,7 +77,6 @@ body {
   bottom: 0;
 }
 
-/* Hamburger icon (default state) */
 .navbar-toggler .top-bar {
   transform: rotate(0);
 }
@@ -67,7 +89,6 @@ body {
   transform: rotate(0);
 }
 
-/* X icon (when expanded) */
 .navbar-toggler:not(.collapsed) .top-bar {
   transform: rotate(45deg);
   transform-origin: 10% 10%;
@@ -82,10 +103,8 @@ body {
   transform-origin: 10% 90%;
 }
 
-/* Text styling */
 .navbar-toggler .toggler-text {
   font-size: 18px;
-  /* Adjust this to match your icon size */
   color: #d7d7d7;
   letter-spacing: 1px;
 }
@@ -94,20 +113,18 @@ html {
   overflow-y: scroll;
 }
 
-.fira-sans-regular {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.fira-sans-medium {
-  font-family: "Fira Sans", sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
 .error {
-  color: red;
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.is-invalid {
+  border-color: #dc3545;
+}
+
+.is-valid {
+  border-color: #198754;
 }
 
 .responsiveCal {
@@ -123,18 +140,6 @@ html {
   left: 0;
   width: 100%;
   height: 100%;
-}
-
-#content-area {
-  display: none;
-  height: 800px;
-  overflow: auto;
-  margin-bottom: 1.5em;
-  padding: 10px;
-  border: solid 1px #d7d7d7;
-  color: #505050;
-  background-color: #ffffff;
-  font-size: 90%;
 }
 
 .logo {
@@ -177,6 +182,72 @@ a.header_href:active {
   text-decoration: none;
 }
 
+a.nav-link {
+  color: #0e6ec9;
+}
+
+.loading-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.9);
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.spinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  color: #333;
+  font-size: 1.2rem;
+  text-align: center;
+}
+
+.btn-submitting {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.recaptcha-error {
+  border: 2px solid #dc3545;
+  border-radius: 4px;
+  padding: 2px;
+}
+
+/* Hide loading overlay by default on all pages */
+.loading-overlay {
+  display: none !important;
+}
+
+/* Only show on kontaktskjema page when needed */
+body.contact-page .loading-overlay {
+  display: none;
+  /* Remove !important to allow JS control */
+}
+
 @media screen and (min-width: 768px) {
   .navbar .navbar-nav .active {
     color: #0c922d;
@@ -209,10 +280,6 @@ a.header_href:active {
     background: #050f30;
   }
 
-  a.nav-link {
-    color: #0e6ec9;
-  }
-
   .navbar .navbar-nav .active {
     display: none;
   }
@@ -223,53 +290,5 @@ a.header_href:active {
 
   .phoneContent {
     display: block;
-  }
-}
-
-@media screen and (max-width: 600px) {
-  #content-area {
-    height: 900px;
-  }
-}
-
-@media screen and (max-width: 510px) {
-  #content-area {
-    height: 1000px;
-  }
-}
-
-@media screen and (max-width: 414px) {
-  #content-area {
-    height: 1100px;
-  }
-}
-
-@media screen and (max-width: 378px) {
-  #content-area {
-    height: 1200px;
-  }
-}
-
-@media screen and (max-width: 328px) {
-  #content-area {
-    height: 1300px;
-  }
-}
-
-@media screen and (max-width: 300px) {
-  #content-area {
-    height: 1400px;
-  }
-}
-
-@media screen and (max-width: 280px) {
-  #content-area {
-    height: 1500px;
-  }
-}
-
-@media screen and (max-width: 260px) {
-  #content-area {
-    height: 1600px;
   }
 }

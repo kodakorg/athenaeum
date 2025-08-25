@@ -2,30 +2,42 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<%- include('../partials/head') -%>
+<head>
+  <%- include('../partials/head') -%>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+</head>
 
-<body>
+<body class="contact-page">
 
   <%- include('../partials/header') -%>
 
-  <div class="container pt-3 fira-sans-medium" style="max-width: 800px;">
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <h3 class="loading-text">Sender skjema, vennligst vent...</h3>
+  </div>
+
+  <div class="container pt-3" style="max-width: 800px;">
     <h3 class="d-none d-md-block">Kontaktskjema</h3>
     <form action="/skjema" id="kontaktskjema" method="post">
       <div class="mb-3">
         <label for="navn" class="form-label">Navn:</label>
-        <input type="text" class="form-control" name="navn">
+        <input type="text" class="form-control" name="navn" id="navn" autocomplete="name">
+        <div class="error" id="navn-error"></div>
       </div>
       <div class="mb-3">
         <label for="email" class="form-label">E-post:</label>
-        <input type="text" id="email" class="form-control" name="epost">
+        <input type="text" id="email" class="form-control" name="epost" autocomplete="email">
+        <div class="error" id="email-error"></div>
       </div>
       <div class="mb-3">
         <label for="tlf" class="form-label">Telefon:</label>
-        <input type="number" class="form-control" name="tlf">
+        <input type="text" class="form-control" name="tlf" id="tlf" autocomplete="tel">
+        <div class="error" id="tlf-error"></div>
       </div>
       <div class="mb-5">
         <label class="form-label" for="dato">Dato:</label><br>
         <input type="date" id="dato" name="dato">
+        <div class="error" id="dato-error"></div>
       </div>
       <div class="mb-5">
         <p>Hvilket av lokalene vil du leie:</p>
@@ -46,83 +58,358 @@
           <input type="radio" class="form-check-input" id="peisestuen" name="lokaler" value="Peisestuen">
           <label class="form-check-label" for="peisestuen">Peisestuen</label><br>
         </div>
+        <div class="error" id="lokaler-error"></div>
       </div>
       <div class="mb-3">
         <label for="formaal" class="form-label">Formål med leien:</label>
         <textarea class="form-control" id="formaal" name="formaal" rows="4"></textarea>
+        <div class="error" id="formaal-error"></div>
       </div>
+
+      <div class="form-group recaptcha-container mb-3">
+        <div id="recaptcha" class="g-recaptcha" data-sitekey="<%= recaptchaSiteKey %>" data-callback="recaptchaCallback"
+          data-expired-callback="recaptchaExpired"></div>
+        <div class="error" id="recaptcha-error"></div>
+      </div>
+
       <div class="mb-3">
         <input id="myCheckbox" type="checkbox">
-        <label for="myCheckbox">Jeg vedtar å ha lest <a href="/vilkaar.txt" id="terms">vilkårene</a></label>
-        <div id="content-area"></div>
+        <label for="myCheckbox">Jeg vedtar å ha lest <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal"
+            id="terms">vilkårene</a></label>
         <br><br>
-        <button class="btn btn-primary" id="myButton" disabled>Send</button>
+        <button class="btn btn-primary" type="submit" id="myButton" disabled>
+          <span id="buttonText">Send</span>
+        </button>
       </div>
     </form>
   </div>
+
+  <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-body" id="modal-content"
+          style="background-color: #f8f9fa; color: #212529; font-size: 0.95rem; line-height: 1.6;">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Lukk</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <br>
   <%- include('../partials/footer') -%>
+
   <script>
+    let isSubmitting = false;
+
     document.getElementById("skjema").classList.add("active");
     document.getElementById("brand").textContent = "Kontaktskjema";
 
-    $(document).ready(function () {
-      $('#myCheckbox').click(function () {
-        $('#myButton').prop("disabled", !$("#myCheckbox").prop("checked"));
-      })
+    document.getElementById('termsModal').addEventListener('show.bs.modal', function () {
+      const modalContent = document.getElementById('modal-content');
+      modalContent.innerHTML = '<div class="text-center"><div class="spinner-border" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+
+      fetch('/vilkaar.txt')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(data => {
+          modalContent.innerHTML = '<div style="background-color: #ffffff; color: #212529; padding: 1rem; border-radius: 0.375rem; border: 1px solid #dee2e6; margin: 0;">' + data + '</div>';
+        })
+        .catch(error => {
+          modalContent.innerHTML = '<p class="text-danger">Kunne ikke laste vilkårene. Error: ' + error.message + '</p>';
+        });
     });
 
-    jQuery.fn.terms_agree = function (content_area, selector) {
-      var body = $(body);
-      $(this).click(function () {
-        body.css("height", "auto").css("height", body.height()); // Prevent page flicker on slideup
-        if ($(content_area).html() == "") {
-          $(content_area).load($(this).attr("href") + (selector ? " " + selector : ""));
-        }
-        $(content_area).slideToggle();
-        return false;
-      });
+    window.recaptchaCallback = function (response) {
+      FormValidator.clearError('recaptcha');
+      console.log('reCAPTCHA completed:', response);
+    };
+
+    window.recaptchaExpired = function () {
+      FormValidator.showError('recaptcha', 'reCAPTCHA har utløpt. Vennligst prøv igjen.');
+      console.log('reCAPTCHA expired');
+
+      if (isSubmitting) {
+        hideLoadingOverlay();
+      }
+    };
+
+    function showLoadingOverlay() {
+      document.getElementById('loadingOverlay').style.display = 'flex';
+      document.getElementById('myButton').disabled = true;
+      document.getElementById('myButton').classList.add('btn-submitting');
+      document.getElementById('buttonText').textContent = 'Sender...';
+      isSubmitting = true;
     }
 
-    $(function () {
-      $("#terms").terms_agree("#content-area");
+    function hideLoadingOverlay() {
+      document.getElementById('loadingOverlay').style.display = 'none';
+      document.getElementById('myButton').disabled = false;
+      document.getElementById('myButton').classList.remove('btn-submitting');
+      document.getElementById('buttonText').textContent = 'Send';
+      isSubmitting = false;
+      const checkbox = document.getElementById('myCheckbox');
+      document.getElementById('myButton').disabled = !checkbox.checked;
+    }
+
+    const FormValidator = {
+      rules: {
+        navn: {
+          required: true,
+          message: "Navn må fylles ut"
+        },
+        email: {
+          required: true,
+          email: true,
+          messages: {
+            required: "Epost må fylles ut",
+            email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
+          }
+        },
+        tlf: {
+          required: true,
+          minLength: 8,
+          maxLength: 8,
+          numeric: true,
+          messages: {
+            required: "Telefonnummer må fylles ut",
+            minLength: "Telefonnummer må være 8 tall",
+            maxLength: "Telefonnummer må være 8 tall",
+            numeric: "Telefonnummer må kun inneholde tall"
+          }
+        },
+        dato: {
+          required: true,
+          message: "Dato må fylles ut"
+        },
+        lokaler: {
+          required: true,
+          message: "Lokale må velges"
+        },
+        formaal: {
+          required: true,
+          message: "Formål må fylles ut"
+        },
+        recaptcha: {
+          required: true,
+          message: "reCAPTCHA må fullføres"
+        }
+      },
+
+      validators: {
+        required: (value) => value.trim() !== '',
+        email: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+        numeric: (value) => /^\d+$/.test(value),
+        minLength: (value, length) => value.length >= length,
+        maxLength: (value, length) => value.length <= length,
+        recaptcha: () => {
+          const response = grecaptcha.getResponse();
+          return response && response.length > 0;
+        }
+      },
+
+      showError: (fieldName, message) => {
+        const errorElement = document.getElementById(`${fieldName}-error`);
+
+        if (fieldName === 'recaptcha') {
+          const recaptchaDiv = document.getElementById('recaptcha');
+          if (recaptchaDiv) {
+            recaptchaDiv.classList.add('recaptcha-error');
+          }
+        } else {
+          const field = document.getElementById(fieldName);
+          if (field) {
+            field.classList.add('is-invalid');
+            field.classList.remove('is-valid');
+          }
+        }
+
+        if (errorElement) {
+          errorElement.textContent = message;
+        }
+      },
+
+      clearError: (fieldName) => {
+        const errorElement = document.getElementById(`${fieldName}-error`);
+
+        if (fieldName === 'recaptcha') {
+          const recaptchaDiv = document.getElementById('recaptcha');
+          if (recaptchaDiv) {
+            recaptchaDiv.classList.remove('recaptcha-error');
+          }
+        } else {
+          const field = document.getElementById(fieldName);
+          if (field) {
+            field.classList.remove('is-invalid');
+            field.classList.add('is-valid');
+          }
+        }
+
+        if (errorElement) {
+          errorElement.textContent = '';
+        }
+      },
+
+      validateField: (fieldName, value) => {
+        const rule = FormValidator.rules[fieldName];
+        if (!rule) return true;
+
+        if (fieldName === 'recaptcha') {
+          if (rule.required && !FormValidator.validators.recaptcha()) {
+            FormValidator.showError(fieldName, rule.message);
+            return false;
+          } else if (FormValidator.validators.recaptcha()) {
+            FormValidator.clearError(fieldName);
+            return true;
+          }
+          return true;
+        }
+
+        if (fieldName === 'lokaler') {
+          const radioButtons = document.querySelectorAll('input[name="lokaler"]');
+          const isChecked = Array.from(radioButtons).some(radio => radio.checked);
+
+          if (rule.required && !isChecked) {
+            FormValidator.showError(fieldName, rule.message);
+            return false;
+          } else {
+            FormValidator.clearError(fieldName);
+            return true;
+          }
+        }
+
+        if (rule.required && !FormValidator.validators.required(value)) {
+          const message = rule.messages?.required || rule.message;
+          FormValidator.showError(fieldName, message);
+          return false;
+        }
+
+        if (value.trim() === '' && !rule.required) {
+          FormValidator.clearError(fieldName);
+          return true;
+        }
+
+        if (rule.email && !FormValidator.validators.email(value)) {
+          const message = rule.messages?.email || 'Invalid email format';
+          FormValidator.showError(fieldName, message);
+          return false;
+        }
+
+        if (rule.numeric && !FormValidator.validators.numeric(value)) {
+          const message = rule.messages?.numeric || 'Must contain only numbers';
+          FormValidator.showError(fieldName, message);
+          return false;
+        }
+
+        if (rule.minLength && !FormValidator.validators.minLength(value, rule.minLength)) {
+          const message = rule.messages?.minLength || `Must be at least ${rule.minLength} characters`;
+          FormValidator.showError(fieldName, message);
+          return false;
+        }
+
+        if (rule.maxLength && !FormValidator.validators.maxLength(value, rule.maxLength)) {
+          const message = rule.messages?.maxLength || `Must be no more than ${rule.maxLength} characters`;
+          FormValidator.showError(fieldName, message);
+          return false;
+        }
+
+        FormValidator.clearError(fieldName);
+        return true;
+      },
+
+      validateForm: () => {
+        let isValid = true;
+
+        Object.keys(FormValidator.rules).forEach(fieldName => {
+          let value = '';
+
+          if (fieldName === 'lokaler' || fieldName === 'recaptcha') {
+            value = '';
+          } else {
+            const field = document.getElementById(fieldName);
+            value = field ? field.value : '';
+          }
+
+          if (!FormValidator.validateField(fieldName, value)) {
+            isValid = false;
+          }
+        });
+
+        return isValid;
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.getElementById('kontaktskjema');
+      const checkbox = document.getElementById('myCheckbox');
+      const submitButton = document.getElementById('myButton');
+
+      if (isSubmitting) {
+        return;
+      }
+
+      checkbox.addEventListener('change', function () {
+        if (!isSubmitting) {
+          submitButton.disabled = !this.checked;
+        }
+      });
+
+      Object.keys(FormValidator.rules).forEach(fieldName => {
+        if (fieldName === 'lokaler') {
+          const radioButtons = document.querySelectorAll('input[name="lokaler"]');
+          radioButtons.forEach(radio => {
+            radio.addEventListener('change', () => {
+              FormValidator.validateField('lokaler', '');
+            });
+          });
+        } else if (fieldName === 'recaptcha') {
+        } else {
+          const field = document.getElementById(fieldName);
+          if (field) {
+            field.addEventListener('blur', function () {
+              FormValidator.validateField(fieldName, this.value);
+            });
+          }
+        }
+      });
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        if (isSubmitting) {
+          return;
+        }
+
+        if (!FormValidator.validateForm()) {
+          const firstInvalidField = document.querySelector('.is-invalid');
+          if (firstInvalidField) {
+            firstInvalidField.focus();
+          }
+          return;
+        }
+
+        showLoadingOverlay();
+
+        try {
+          this.submit();
+        } catch (error) {
+          hideLoadingOverlay();
+          alert('En feil oppstod under sending av skjema. Prøv igjen.');
+        }
+      });
     });
 
-    $("#kontaktskjema").validate({
-      rules: {
-        navn: "required",
-        epost: {
-          required: true,
-          email: true
-        },
-        tlf: {
-          required: true,
-          minlength: 8,
-          maxlength: 8
-        },
-        dato: "required",
-        lokaler: "required",
-        formaal: "required"
-      },
-      messages: {
-        navn: "Navn må fylles ut",
-        epost: {
-          required: "Epost må fylles ut",
-          email: "En gyldig e-post adresse må fylles ut f.eks. navn@domene.no"
-        },
-        tlf: {
-          required: "Telefonnummer må fylles ut",
-          minlengt: "Telefonnummer må være 8 tall",
-          maxlength: "Telefonnummer må være 8 tall"
-        },
-        dato: "Dato må fylles ut",
-        lokaler: "Lokale må velges",
-        formaal: "Formål må fylles ut"
+    window.addEventListener('beforeunload', function () {
+      if (isSubmitting) {
+        hideLoadingOverlay();
       }
     });
   </script>
-
-
 </body>
 
 </html>
