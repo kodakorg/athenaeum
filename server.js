@@ -155,6 +155,13 @@ app.post('/skjema', async function (req, res) {
   }
 
   if (sjekk === false) {
+    const logData = `${new Date().toISOString()} - Navn: ${navn}, Epost: ${epost}, Telefon: ${tlf}, Dato: ${dato}, Lokaler: ${lokaler}, Formål: ${tekst}, Message: ${message}\n`;
+    const logPath = path.join(__dirname, 'logs', 'form-submissions-error.txt');
+
+    fs.mkdir(path.dirname(logPath), { recursive: true })
+      .then(() => fs.appendFile(logPath, logData))
+      .catch(err => console.error('Error writing to log file:', err));
+
     res.render('pages/tilbakemelding', {
       sjekk: sjekk,
       message: message
@@ -165,11 +172,9 @@ app.post('/skjema', async function (req, res) {
         if (error) {
           console.log(error);
         } else {
-          // Log the form data to file
           const logData = `${new Date().toISOString()} - Navn: ${navn}, Epost: ${epost}, Telefon: ${tlf}, Dato: ${dato}, Lokaler: ${lokaler}, Formål: ${tekst}\n`;
-          const logPath = path.join(__dirname, 'logs', 'form-submissions.txt');
+          const logPath = path.join(__dirname, 'logs', 'form-submissions-success.txt');
 
-          // Ensure logs directory exists and append data
           fs.mkdir(path.dirname(logPath), { recursive: true })
             .then(() => fs.appendFile(logPath, logData))
             .catch(err => console.error('Error writing to log file:', err));
@@ -189,15 +194,17 @@ app.post('/skjema', async function (req, res) {
       });
     } else if (process.env.NODE_ENV === 'development') {
       console.log(mailOptions);
-      // Log the form data to file
+
       const logData = `${new Date().toISOString()} - Navn: ${navn}, Epost: ${epost}, Telefon: ${tlf}, Dato: ${dato}, Lokaler: ${lokaler}, Formål: ${tekst}\n`;
       const logPath = path.join(__dirname, 'logs', 'form-submissions.txt');
 
-      // Ensure logs directory exists and append data
       fs.mkdir(path.dirname(logPath), { recursive: true })
         .then(() => fs.appendFile(logPath, logData))
         .catch(err => console.error('Error writing to log file:', err));
+
       res.render('pages/tilbakemelding', { sjekk: sjekk, message: message });
+    } else {
+      console.warn(`Unknown environment when POST /skjema: ${process.env.NODE_ENV}`);
     }
   }
 });
