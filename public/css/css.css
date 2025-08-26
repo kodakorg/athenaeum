@@ -182,6 +182,10 @@ a.header_href:active {
   text-decoration: none;
 }
 
+a.nav-link:hover {
+  color: #d7d7d7;
+}
+
 a.nav-link {
   color: #0e6ec9;
 }
