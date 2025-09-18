@@ -145,7 +145,6 @@ app.post('/skjema', async function (req, res) {
           address: process.env.EMAIL_ADDRESS
         },
         to: process.env.EMAIL_ADDRESS_TO,
-        bcc: epost,
         replyTo: epost,
         subject: 'Bestilling av rom for Namsos Athenæum',
         text: html_string,
